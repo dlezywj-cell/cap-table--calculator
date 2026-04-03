@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一级市场 Cap Table 收益率计算器</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f9f8f6;
+    --surface: #ffffff;
+    --surface2: #f3f2ef;
+    --border: #e2e0da;
+    --border2: #cccac3;
+    --text: #1a1917;
+    --text2: #6b6860;
+    --text3: #9b9990;
+    --blue: #185fa5;
+    --blue-light: #e6f1fb;
+    --blue-mid: #b5d4f4;
+    --green: #0f6e56;
+    --green-light: #eaf3de;
+    --green-mid: #c0dd97;
+    --amber: #ba7517;
+    --amber-light: #faeeda;
+    --red: #a32d2d;
+    --red-light: #fcebeb;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Consolas', monospace;
+    --sans: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #18171a;
+      --surface: #232228;
+      --surface2: #2c2b31;
+      --border: #3a3840;
+      --border2: #4e4c56;
+      --text: #eeecea;
+      --text2: #a09ea8;
+      --text3: #706e78;
+      --blue: #5ea4e8;
+      --blue-light: #152033;
+      --blue-mid: #1e3a5c;
+      --green: #4ebe9c;
+      --green-light: #0f2920;
+      --green-mid: #1a4a30;
+      --amber: #f0b840;
+      --amber-light: #2a1f08;
+      --red: #f07070;
+      --red-light: #2a1010;
+    }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .header {
+    margin-bottom: 36px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -.3px;
+  }
+  .header p {
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 6px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 14px;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 5px;
+  }
+
+  input, select {
+    width: 100%;
+    height: 36px;
+    padding: 0 11px;
+    font-size: 13px;
+    font-family: var(--sans);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s;
+  }
+  input:focus, select:focus { border-color: var(--blue); }
+  input[type=number]::-webkit-inner-spin-button { opacity: .4; }
+
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .g4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+  .g5 { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; }
+
+  @media (max-width: 600px) {
+    .g2, .g3, .g4, .g5 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 400px) {
+    .g2, .g3, .g4, .g5 { grid-template-columns: 1fr; }
+  }
+
+  /* Mode toggle */
+  .mode-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+  .mode-btn {
+    flex: 1;
+    height: 48px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--sans);
+    transition: all .15s;
+  }
+  .mode-btn:hover { border-color: var(--border2); color: var(--text); }
+  .mode-btn.active-direct {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    color: var(--blue);
+  }
+  .mode-btn.active-lp {
+    border-color: var(--green);
+    background: var(--green-light);
+    color: var(--green);
+  }
+
+  /* Round rows */
+  .round-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr 1fr 36px;
+    gap: 10px;
+    align-items: end;
+    margin-bottom: 10px;
+  }
+  @media (max-width: 600px) {
+    .round-row { grid-template-columns: 1fr 1fr; }
+    .round-row .del-col { display: none; }
+  }
+
+  .btn {
+    height: 36px;
+    padding: 0 16px;
+    font-size: 13px;
+    font-family: var(--sans);
+    font-weight: 500;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--surface2); }
+  .btn-add { border-color: var(--blue); color: var(--blue); }
+  .btn-add:hover { background: var(--blue-light); }
+  .btn-del {
+    width: 36px; height: 36px; padding: 0;
+    font-size: 14px; color: var(--text3);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-del:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
+  .btn-calc {
+    height: 42px;
+    padding: 0 32px;
+    font-size: 15px;
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue);
+  }
+  .btn-calc:hover { opacity: .88; }
+
+  /* Info box */
+  .info-box {
+    padding: 11px 14px;
+    border-radius: var(--radius);
+    font-size: 12px;
+    background: var(--blue-light);
+    border: 1px solid var(--blue-mid);
+    color: var(--blue);
+    line-height: 1.7;
+    margin-top: 10px;
+  }
+
+  /* Note */
+  .note {
+    font-size: 11.5px;
+    color: var(--text3);
+    margin-top: 8px;
+    line-height: 1.65;
+  }
+
+  /* Error */
+  .alert {
+    padding: 11px 14px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    background: var(--red-light);
+    border: 1px solid #f09595;
+    color: var(--red);
+    margin-bottom: 14px;
+    display: none;
+  }
+
+  /* Metric cards */
+  .metric-card {
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .metric-label { font-size: 11px; color: var(--text2); margin-bottom: 6px; }
+  .metric-val {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: var(--mono);
+    color: var(--text);
+  }
+  .metric-val.blue { color: var(--blue); }
+  .metric-val.green { color: var(--green); }
+  .metric-val.amber { color: var(--amber); }
+  .metric-val.red { color: var(--red); }
+
+  /* Waterfall table */
+  .wf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .wf-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .wf-table td:last-child {
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .wf-table tr.wf-head td {
+    background: var(--surface2);
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    padding: 7px 12px;
+  }
+  .wf-table tr.wf-total td {
+    border-top: 2px solid var(--border2);
+    border-bottom: none;
+    font-weight: 600;
+    font-size: 14px;
+    padding-top: 12px;
+  }
+  .wf-table tr.wf-sub td {
+    font-size: 12px;
+    color: var(--text2);
+    border-bottom-style: dashed;
+    padding: 7px 12px;
+  }
+  .wf-table tr.wf-ref td {
+    font-size: 11.5px;
+    color: var(--text3);
+    border-bottom: none;
+    padding: 10px 12px 4px;
+  }
+  .neg { color: var(--red); }
+  .pos { color: var(--green); }
+  .neutral { color: var(--text2); }
+
+  /* Cap table */
+  .ct {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .ct th {
+    text-align: left;
+    padding: 8px 10px;
+    color: var(--text2);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .ct td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  .ct td.r { text-align: right; font-family: var(--mono); font-size: 11.5px; }
+  .ct td.rp { text-align: right; font-family: var(--mono); font-size: 12px; font-weight: 600; }
+  .ct tr:last-child td { border-bottom: none; }
+  .ct tr.u-row td { background: var(--blue-light); }
+  .ct tr.u-row td.rp { color: var(--blue); }
+  .ct tr.ipo-row td { background: var(--green-light); }
+  .ct tr.ipo-row td.rp { color: var(--green); }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-weight: 500;
+  }
+  .tb { background: var(--blue-mid); color: var(--blue); }
+  .tg { background: var(--green-mid); color: var(--green); }
+
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    margin-top: 20px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 10px;
+  }
+  .legend span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .leg-dot {
+    width: 10px; height: 3px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+
+  .hidden { display: none; }
+  .sep { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+  footer {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--text3);
+    margin-top: 48px;
+    line-height: 1.8;
+  }
+  footer a { color: var(--text2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>一级市场 Cap Table 收益率计算器</h1>
+    <p>支持任意轮次入场 · 直投与 LP 跟投两种模式 · 含稀释、税收、管理费及 Carry 完整拆解</p>
+  </div>
+
+  <!-- Mode -->
+  <div class="mode-bar">
+    <button class="mode-btn active-direct" id="btn-direct" onclick="setMode('direct')">
+      直投 Direct Investment
+    </button>
+    <button class="mode-btn" id="btn-lp" onclick="setMode('lp')">
+      LP 跟投 Co-investment
+    </button>
+  </div>
+
+  <!-- Rounds -->
+  <div class="card">
+    <h2>融资轮次设置</h2>
+    <div id="rounds-c"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-top:4px">
+      <button class="btn btn-add" onclick="addRound()">+ 添加轮次</button>
+      <span class="note">按时间顺序从早到晚排列，IPO 在下方单独设置</span>
+    </div>
+  </div>
+
+  <!-- Your investment -->
+  <div class="card">
+    <h2>您的投资信息</h2>
+    <div class="g3">
+      <div>
+        <label>参与轮次（您入场的轮次）</label>
+        <select id="u-round"></select>
+      </div>
+      <div>
+        <label>认缴 / 投资金额（万元）</label>
+        <input type="number" id="u-invest" value="500" min="1">
+      </div>
+      <div>
+        <label>持有至退出年数</label>
+        <input type="number" id="u-years" value="5" min="0.5" step="0.5">
+      </div>
+    </div>
+  </div>
+
+  <!-- LP terms -->
+  <div class="card hidden" id="lp-card">
+    <h2>基金条款（LP 跟投）</h2>
+    <div class="g4">
+      <div>
+        <label>年管理费率（%）</label>
+        <input type="number" id="lp-fee" value="2" min="0" max="5" step="0.1">
+      </div>
+      <div>
+        <label>管理费收费基数</label>
+        <select id="lp-fee-base">
+          <option value="commit">认缴金额</option>
+          <option value="invest">实投金额</option>
+        </select>
+      </div>
+      <div>
+        <label>门槛收益率 Hurdle（%/年）</label>
+        <input type="number" id="lp-hurdle" value="8" min="0" max="20" step="0.5">
+      </div>
+      <div>
+        <label>超额分成 Carry（%）</label>
+        <input type="number" id="lp-carry" value="20" min="0" max="30" step="1">
+      </div>
+    </div>
+    <p class="note" style="margin-top:10px">
+      · 管理费从认缴资金中扣除，在投资前即产生，不计入被投企业股权<br>
+      · Carry 采用欧洲瀑布（European Waterfall）：先全额返还本金 → 达到门槛收益 → GP Catch-up → 剩余 (1−Carry%) / Carry% 分配<br>
+      · 本模型简化处理：超额部分整体按 Carry% 计算，适用于基金无 GP catch-up 条款场景
+    </p>
+  </div>
+
+  <!-- Tax -->
+  <div class="card">
+    <h2>税收设置</h2>
+
+    <!-- Direct tax -->
+    <div id="direct-tax">
+      <div class="g3">
+        <div>
+          <label>退出方式</label>
+          <select id="exit-type">
+            <option value="open">二级市场减持（A股）</option>
+            <option value="transfer">股权转让 / 境外上市减持</option>
+          </select>
+        </div>
+        <div>
+          <label>投资主体</label>
+          <select id="investor-type" onchange="updateTaxHint()">
+            <option value="individual">个人（自然人）</option>
+            <option value="corp">企业法人</option>
+            <option value="fund">合伙制基金</option>
+          </select>
+        </div>
+        <div>
+          <label>适用税率（%，可手动修改）</label>
+          <input type="number" id="tax-rate" value="20" min="0" max="45" step="1">
+        </div>
+      </div>
+      <div class="info-box" id="tax-hint"></div>
+    </div>
+
+    <!-- LP tax -->
+    <div id="lp-tax-sec" class="hidden">
+      <div class="g3">
+        <div>
+          <label>LP 分配适用税率（%）</label>
+          <input type="number" id="lp-tax" value="20" min="0" max="45" step="1">
+        </div>
+        <div>
+          <label>计税基数</label>
+          <select id="lp-tax-base">
+            <option value="gain">分配额 − 成本（仅计增益部分）</option>
+            <option value="total">分配总额</option>
+          </select>
+        </div>
+        <div>
+          <label>投资主体（LP）</label>
+          <select id="lp-investor-type">
+            <option value="individual">个人自然人</option>
+            <option value="corp">法人合伙人</option>
+          </select>
+        </div>
+      </div>
+      <p class="note" style="margin-top:10px">
+        · 个人 LP：基金分配后按 20% 个人所得税；部分地区对股权投资基金有核定征收优惠<br>
+        · 法人合伙人：分配并入企业所得税，一般税率 25%；高新技术企业 15%
+      </p>
+    </div>
+  </div>
+
+  <!-- IPO -->
+  <div class="card">
+    <h2>IPO 退出设置</h2>
+    <div class="g3">
+      <div>
+        <label>IPO 发行后总市值（万元）</label>
+        <input type="number" id="ipo-val" value="150000" min="1">
+      </div>
+      <div>
+        <label>IPO 本次募资额（万元）</label>
+        <input type="number" id="ipo-raise" value="30000" min="0">
+      </div>
+      <div>
+        <label>IPO 新增期权池（%）</label>
+        <input type="number" id="ipo-esop" value="0" min="0" max="20" step="0.5">
+      </div>
+    </div>
+    <p class="note">· 投前估值 = IPO 总市值 − IPO 募资额；新增股份比例 = 募资额 ÷ 总市值</p>
+  </div>
+
+  <!-- Error -->
+  <div class="alert" id="err"></div>
+
+  <!-- Calculate button -->
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
+    <button class="btn btn-calc" onclick="calc()">计算收益率</button>
+    <span class="note">所有金额单位：万元人民币</span>
+  </div>
+
+  <!-- Results -->
+  <div id="results" class="hidden">
+
+    <!-- Metrics -->
+    <div class="card">
+      <h2>退出收益摘要</h2>
+      <div class="g5" id="metrics" style="margin-bottom:0"></div>
+    </div>
+
+    <!-- Waterfall -->
+    <div class="card">
+      <h2>收益瀑布拆解</h2>
+      <table class="wf-table" id="wfall"></table>
+    </div>
+
+    <!-- Cap Table -->
+    <div class="card">
+      <h2>Cap Table 演变（完全稀释口径）</h2>
+      <div style="overflow-x:auto">
+        <table class="ct" id="cap-t">
+          <thead>
+            <tr>
+              <th>轮次</th>
+              <th style="text-align:right">投前估值</th>
+              <th style="text-align:right">融资额</th>
+              <th style="text-align:right">投后估值</th>
+              <th style="text-align:right">总股本</th>
+              <th style="text-align:right">本轮投资方%</th>
+              <th style="text-align:right">您的持股%</th>
+            </tr>
+          </thead>
+          <tbody id="cap-b"></tbody>
+        </table>
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="ch"></canvas>
+      </div>
+      <div class="legend">
+        <span><span class="leg-dot" style="background:#378add"></span>您的持股比例</span>
+        <span><span class="leg-dot" style="background:#ef9f27;height:2px;border-top:2px dashed #ef9f27;background:none"></span>本轮新投资方占比</span>
+      </div>
+    </div>
+
+    <!-- Methodology -->
+    <div class="card" style="background:var(--surface2)">
+      <h2>计算方法说明</h2>
+      <div style="font-size:12.5px;color:var(--text2);line-height:1.9">
+        <p><strong style="color:var(--text)">稀释机制：</strong>每轮融资采用"先扩期权池再计算本轮投资方占比"的标准 pre-money ESOP 逻辑，确保期权池稀释由老股东承担。</p>
+        <p style="margin-top:8px"><strong style="color:var(--text)">MOIC：</strong>退出时持股市值 ÷ 初始投资金额（含税/费前后分别展示）。</p>
+        <p style="margin-top:8px"><strong style="color:var(--text)">IRR：</strong>假设单笔投入、单笔退出，公式为 (退出净值 ÷ 成本)^(1/年数) − 1。如需多期现金流 IRR，请联系开发者。</p>
+        <p style="margin-top:8px"><strong style="color:var(--text)">LP Carry 瀑布：</strong>欧洲瀑布模型，先返还全部出资本金，超过门槛收益率后 GP 参与超额分成，本模型暂不含 GP catch-up 步骤。</p>
+        <p style="margin-top:8px"><strong style="color:var(--text)">税务免责：</strong>税率仅为参考，实际适用税率因主体结构、地区政策、持股期限而异，请以专业税务顾问意见为准。</p>
+      </div>
+    </div>
+
+  </div><!-- /results -->
+
+  <footer>
+    <p>Cap Table IRR Calculator &nbsp;·&nbsp; 仅供参考，不构成投资建议</p>
+    <p style="margin-top:4px">数据不上传，全部本地计算 &nbsp;·&nbsp; <a href="https://github.com" target="_blank">GitHub</a></p>
+  </footer>
+
+</div><!-- /page -->
+
+<script>
+/* ============================================================
+   State
+   ============================================================ */
+let mode = 'direct';
+let rounds = [
+  { name: 'A轮', pre: 5000,  raise: 1000, esop: 5 },
+  { name: 'B轮', pre: 20000, raise: 3000, esop: 0 },
+  { name: 'C轮', pre: 60000, raise: 8000, esop: 0 }
+];
+let chartInst = null;
+
+/* ============================================================
+   Mode
+   ============================================================ */
+function setMode(m) {
+  mode = m;
+  document.getElementById('btn-direct').className = 'mode-btn' + (m === 'direct' ? ' active-direct' : '');
+  document.getElementById('btn-lp').className     = 'mode-btn' + (m === 'lp'     ? ' active-lp'     : '');
+  document.getElementById('lp-card').className    = m === 'lp' ? 'card' : 'card hidden';
+  document.getElementById('direct-tax').className = m === 'direct' ? '' : 'hidden';
+  document.getElementById('lp-tax-sec').className = m === 'lp'     ? '' : 'hidden';
+}
+
+/* ============================================================
+   Tax hints
+   ============================================================ */
+const TAX_HINTS = {
+  individual: '个人直接持股：股权转让所得税率通常为 20%（应纳税所得额 = 转让价 − 原值 − 合理费用）。A 股二级市场减持目前个人暂免征收个人所得税；境外上市（港股、美股）减持需按规缴纳。',
+  corp:        '企业法人：股权转让收益并入企业所得税，一般税率 25%；高新技术企业 15%；小微企业有阶梯优惠。居民企业间直接投资持股 12 个月以上取得的股息红利免税（非上市公司直接持股）。',
+  fund:        '合伙制基金（有限合伙）穿透征税：自然人合伙人通常按"经营所得"适用 5%～35% 五级超额累进税率，但部分地区（北京、上海、深圳、新疆等）对股权投资基金自然人 LP 有 20% 核定征收优惠政策；法人合伙人并入企业所得税 25%。'
+};
+function updateTaxHint() {
+  const t = document.getElementById('investor-type').value;
+  document.getElementById('tax-hint').textContent = TAX_HINTS[t];
+  const rates = { individual: 20, corp: 25, fund: 20 };
+  document.getElementById('tax-rate').value = rates[t];
+}
+
+/* ============================================================
+   Rounds UI
+   ============================================================ */
+function renderRounds() {
+  const c = document.getElementById('rounds-c');
+  c.innerHTML = '';
+  rounds.forEach((r, i) => {
+    const d = document.createElement('div');
+    d.className = 'round-row';
+    d.innerHTML = `
+      <div>
+        <label>名称</label>
+        <input value="${r.name}" oninput="rounds[${i}].name=this.value;updateSel()">
+      </div>
+      <div>
+        <label>投前估值（万元）</label>
+        <input type="number" value="${r.pre}" min="1" oninput="rounds[${i}].pre=+this.value">
+      </div>
+      <div>
+        <label>本轮融资额（万元）</label>
+        <input type="number" value="${r.raise}" min="1" oninput="rounds[${i}].raise=+this.value">
+      </div>
+      <div>
+        <label>本轮新增期权池（%）</label>
+        <input type="number" value="${r.esop}" min="0" max="30" step="0.5"
+               oninput="rounds[${i}].esop=+this.value">
+      </div>
+      <div class="del-col" style="display:flex;align-items:flex-end">
+        <button class="btn btn-del" onclick="rmRound(${i})" title="删除此轮">✕</button>
+      </div>`;
+    c.appendChild(d);
+  });
+  updateSel();
+}
+
+function updateSel() {
+  const s = document.getElementById('u-round');
+  const prev = s.value;
+  s.innerHTML = rounds.map((r, i) => `<option value="${i}">${r.name}</option>`).join('');
+  if (prev !== '' && +prev < rounds.length) s.value = prev;
+}
+
+function addRound() {
+  const letters = 'ABCDEFGHIJKLMNOP';
+  const nextName = letters[rounds.length] ? letters[rounds.length] + '轮' : `第${rounds.length+1}轮`;
+  rounds.push({ name: nextName, pre: 150000, raise: 20000, esop: 0 });
+  renderRounds();
+}
+
+function rmRound(i) {
+  if (rounds.length <= 1) return;
+  rounds.splice(i, 1);
+  renderRounds();
+}
+
+/* ============================================================
+   Formatters
+   ============================================================ */
+function fmt(n) {
+  if (n === undefined || isNaN(n)) return '—';
+  if (Math.abs(n) >= 100000) return (n / 10000).toFixed(2) + ' 亿';
+  if (Math.abs(n) >= 10000)  return (n / 10000).toFixed(3) + ' 亿';
+  return n.toLocaleString('zh-CN', { maximumFractionDigits: 0 }) + ' 万';
+}
+function fmtPct(n)    { return (n * 100).toFixed(2) + '%'; }
+function fmtShares(n) { return (n / 1000).toFixed(1) + 'K'; }
+function fmtMOIC(n)   { return n.toFixed(2) + 'x'; }
+function fmtIRR(n)    { return (n * 100).toFixed(1) + '%'; }
+function irrColor(irr){ return irr >= 0.3 ? 'green' : irr >= 0.15 ? 'amber' : irr >= 0 ? 'blue' : 'red'; }
+
+/* ============================================================
+   Core calculation
+   ============================================================ */
+function calc() {
+  document.getElementById('err').style.display = 'none';
+
+  const uIdx    = +document.getElementById('u-round').value;
+  const uInvest = +document.getElementById('u-invest').value;
+  const uYears  = +document.getElementById('u-years').value;
+  const ipoVal  = +document.getElementById('ipo-val').value;
+  const ipoRaise= +document.getElementById('ipo-raise').value;
+  const ipoEsop = +document.getElementById('ipo-esop').value / 100;
+
+  if (!uInvest || !uYears || !ipoVal) { showErr('请填写完整的投资金额、持有年数和 IPO 退出估值'); return; }
+  if (ipoRaise >= ipoVal)              { showErr('IPO 募资额不能大于等于 IPO 总估值'); return; }
+
+  /* ---- Build Cap Table ---- */
+  const allR = [
+    ...rounds,
+    { name: 'IPO', pre: ipoVal - ipoRaise, raise: ipoRaise, esop: ipoEsop * 100 }
+  ];
+
+  const BASE_SHARES = 10_000_000;
+  let total = BASE_SHARES;
+  let userShares = 0;
+  const rows = [], labels = [], chartUser = [], chartNew = [];
+
+  allR.forEach((r, idx) => {
+    const esopF   = r.esop / 100;
+    const esopSh  = Math.round(total * esopF / (1 - esopF));
+    const aft     = total + esopSh;
+    const postVal = r.pre + r.raise;
+    const newSh   = Math.round(aft * (r.raise / postVal));
+    total         = aft + newSh;
+    const roundPct = newSh / total;
+
+    if (idx === uIdx) {
+      const ratio = uInvest / r.raise;
+      userShares  = Math.round(newSh * ratio);
+    }
+
+    const uPct = userShares / total;
+    rows.push({
+      name: r.name,
+      isU: idx === uIdx,
+      isIPO: idx === allR.length - 1,
+      pre: r.pre, raise: r.raise, post: postVal,
+      total, roundPct, uPct
+    });
+    labels.push(r.name);
+    chartUser.push(+(uPct * 100).toFixed(3));
+    chartNew.push(+(roundPct * 100).toFixed(3));
+  });
+
+  const finalPct  = rows[rows.length - 1].uPct;
+  const grossExit = ipoVal * finalPct;
+  const grossMoic = grossExit / uInvest;
+  const grossIRR  = Math.pow(Math.max(grossMoic, 0.0001), 1 / uYears) - 1;
+
+  /* ---- Waterfall ---- */
+  let net, wfRows;
+
+  if (mode === 'direct') {
+    const taxRate = +document.getElementById('tax-rate').value / 100;
+    const gain    = grossExit - uInvest;
+    const tax     = Math.max(0, gain) * taxRate;
+    net = grossExit - tax;
+
+    wfRows = [
+      /* Section: 投入 */
+      { type: 'head', label: '投入' },
+      { label: '投入本金',           val: fmt(uInvest),          cls: '' },
+
+      /* Section: 退出 */
+      { type: 'head', label: '退出' },
+      { label: '退出时持股比例',     val: fmtPct(finalPct),      cls: '' },
+      { label: '毛退出价值',         val: fmt(grossExit),        cls: '' },
+
+      /* Section: 税 */
+      { type: 'head', label: '税收' },
+      { label: '计税基数（增益部分）',val: fmt(Math.max(0,gain)), cls: '' },
+      { label: `适用税率 ${(taxRate*100).toFixed(0)}% → 应缴税款`,
+                                     val: '−' + fmt(tax),        cls: 'neg' },
+
+      /* Total */
+      { type: 'total',
+        label: '税后净到手金额',     val: fmt(net),              cls: net >= uInvest ? 'pos' : 'red' },
+      { type: 'sub',
+        label: '净增益',            val: (net-uInvest>=0?'+':'')+fmt(net-uInvest),
+                                                                  cls: net>=uInvest?'pos':'neg' },
+    ];
+  } else {
+    const feeRate   = +document.getElementById('lp-fee').value / 100;
+    const hurdleRate= +document.getElementById('lp-hurdle').value / 100;
+    const carryRate = +document.getElementById('lp-carry').value / 100;
+    const lpTax     = +document.getElementById('lp-tax').value / 100;
+    const lpTaxBase = document.getElementById('lp-tax-base').value;
+
+    const totalFees  = uInvest * feeRate * uYears;
+    const hurdleAmt  = uInvest * Math.pow(1 + hurdleRate, uYears);
+    const superProfit= Math.max(0, grossExit - uInvest);
+    const carry      = grossExit > hurdleAmt ? superProfit * carryRate : 0;
+    const afterCarry = grossExit - carry;
+    const taxBase    = lpTaxBase === 'gain' ? Math.max(0, afterCarry - uInvest) : afterCarry;
+    const tax        = taxBase * lpTax;
+    net = afterCarry - tax;
+    const netAfterFees = net - totalFees; // informational
+
+    wfRows = [
+      /* Section: 投入 */
+      { type: 'head', label: '投入' },
+      { label: '认缴本金',               val: fmt(uInvest),                  cls: '' },
+      { label: `管理费 ${(feeRate*100).toFixed(1)}%/年 × ${uYears}年`,
+                                         val: '−' + fmt(totalFees),           cls: 'neg' },
+      { label: '净实际出资',             val: fmt(uInvest - totalFees),       cls: '' },
+
+      /* Section: 退出 */
+      { type: 'head', label: '退出' },
+      { label: '退出时持股比例',         val: fmtPct(finalPct),               cls: '' },
+      { label: '毛退出价值',             val: fmt(grossExit),                 cls: '' },
+      { label: `门槛收益率 ${(hurdleRate*100).toFixed(0)}%/年 → 门槛值`,
+                                         val: fmt(hurdleAmt),                 cls: 'neutral' },
+      { label: carry > 0 ? `超过门槛，Carry ${(carryRate*100).toFixed(0)}% 分成`
+                         : `未达门槛，Carry 不触发（${(carryRate*100).toFixed(0)}%）`,
+                                         val: carry > 0 ? '−' + fmt(carry) : fmt(0),
+                                                                              cls: carry>0?'neg':'neutral' },
+      { label: '扣 Carry 后 LP 分配额', val: fmt(afterCarry),                cls: '' },
+
+      /* Section: 税 */
+      { type: 'head', label: '税收' },
+      { label: `计税基数（${lpTaxBase==='gain'?'增益部分':'分配总额'}）`,
+                                         val: fmt(taxBase),                   cls: '' },
+      { label: `税率 ${(lpTax*100).toFixed(0)}% → 应缴税款`,
+                                         val: '−' + fmt(tax),                 cls: 'neg' },
+
+      /* Total */
+      { type: 'total',
+        label: 'LP 税后净到手',         val: fmt(net),                       cls: net >= uInvest ? 'pos' : 'red' },
+      { type: 'sub',
+        label: '含管理费后综合净增益',   val: (netAfterFees>=0?'+':'')+fmt(netAfterFees),
+                                                                              cls: netAfterFees>=0?'pos':'neg' },
+    ];
+  }
+
+  const netMoic = net / uInvest;
+  const netIRR  = Math.pow(Math.max(netMoic, 0.0001), 1 / uYears) - 1;
+  const color   = irrColor(netIRR);
+
+  /* ---- Render metrics ---- */
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric-card">
+      <div class="metric-label">退出时持股%</div>
+      <div class="metric-val blue">${fmtPct(finalPct)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">毛退出价值</div>
+      <div class="metric-val">${fmt(grossExit)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">${mode==='lp'?'LP ':''}净到手金额</div>
+      <div class="metric-val ${color}">${fmt(net)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">净 MOIC</div>
+      <div class="metric-val ${color}">${fmtMOIC(netMoic)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">净 IRR（年化）</div>
+      <div class="metric-val ${color}">${fmtIRR(netIRR)}</div>
+    </div>`;
+
+  /* ---- Render waterfall ---- */
+  document.getElementById('wfall').innerHTML =
+    wfRows.map(r => {
+      if (r.type === 'head') {
+        return `<tr class="wf-head"><td colspan="2">${r.label}</td></tr>`;
+      }
+      if (r.type === 'total') {
+        return `<tr class="wf-total"><td>${r.label}</td><td class="${r.cls}">${r.val}</td></tr>`;
+      }
+      if (r.type === 'sub') {
+        return `<tr class="wf-sub"><td style="padding-left:24px">${r.label}</td><td class="${r.cls}">${r.val}</td></tr>`;
+      }
+      return `<tr><td style="padding-left:16px">${r.label}</td><td class="${r.cls}">${r.val}</td></tr>`;
+    }).join('') +
+    `<tr class="wf-ref">
+       <td>参考：毛 MOIC / 毛 IRR（税费前）</td>
+       <td>${fmtMOIC(grossMoic)} / ${fmtIRR(grossIRR)}</td>
+     </tr>`;
+
+  /* ---- Render Cap Table ---- */
+  document.getElementById('cap-b').innerHTML = rows.map(r => `
+    <tr class="${r.isU ? 'u-row' : r.isIPO ? 'ipo-row' : ''}">
+      <td>
+        ${r.name}
+        ${r.isU   ? '<span class="tag tb">您入场</span>' : ''}
+        ${r.isIPO ? '<span class="tag tg">IPO退出</span>' : ''}
+      </td>
+      <td class="r">${fmt(r.pre)}</td>
+      <td class="r">${fmt(r.raise)}</td>
+      <td class="r">${fmt(r.post)}</td>
+      <td class="r">${fmtShares(r.total)}</td>
+      <td class="rp">${fmtPct(r.roundPct)}</td>
+      <td class="rp" style="color:${r.uPct > 0 ? 'var(--blue)' : 'var(--text3)'}">
+        ${r.uPct > 0 ? fmtPct(r.uPct) : '—'}
+      </td>
+    </tr>`).join('');
+
+  /* ---- Chart ---- */
+  if (chartInst) { chartInst.destroy(); chartInst = null; }
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
+  const tickColor = isDark ? '#706e78' : '#9b9990';
+
+  chartInst = new Chart(document.getElementById('ch'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: '您的持股%',
+          data: chartUser,
+          borderColor: '#378add',
+          backgroundColor: isDark ? 'rgba(55,138,221,0.1)' : 'rgba(55,138,221,0.07)',
+          fill: true,
+          tension: 0.3,
+          pointBackgroundColor: '#378add',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        },
+        {
+          label: '本轮新投资方占比%',
+          data: chartNew,
+          borderColor: '#ef9f27',
+          fill: false,
+          tension: 0.3,
+          borderDash: [5, 4],
+          pointBackgroundColor: '#ef9f27',
+          pointRadius: 4,
+          pointHoverRadius: 6,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw.toFixed(2)}%` }
+        }
+      },
+      scales: {
+        y: {
+          ticks: { callback: v => v + '%', font: { size: 11 }, color: tickColor },
+          grid: { color: gridColor }
+        },
+        x: {
+          ticks: { font: { size: 11 }, color: tickColor },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+
+  document.getElementById('results').className = '';
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showErr(msg) {
+  const e = document.getElementById('err');
+  e.textContent = msg;
+  e.style.display = 'block';
+}
+
+/* ============================================================
+   Init
+   ============================================================ */
+renderRounds();
+updateTaxHint();
+setTimeout(calc, 150);
+</script>
+</body>
+</html>
