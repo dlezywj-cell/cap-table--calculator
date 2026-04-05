@@ -849,7 +849,6 @@ function calc() {
       { label: '认缴本金',               val: fmt(uInvest),                  cls: '' },
       { label: `管理费 ${(feeRate*100).toFixed(1)}%/年 × ${uYears}年`,
                                          val: '−' + fmt(totalFees),           cls: 'neg' },
-      { label: '净实际出资',             val: fmt(uInvest - totalFees),       cls: '' },
 
       /* Section: 退出 */
       { type: 'head', label: '退出' },
