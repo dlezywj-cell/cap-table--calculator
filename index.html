@@ -767,7 +767,7 @@ function calc() {
     const esopSh  = Math.round(total * esopF / (1 - esopF));
     const aft     = total + esopSh;
     const postVal = r.pre + r.raise;
-    const newSh   = Math.round(aft * (r.raise / postVal));
+    const newSh   = Math.round(aft * (r.raise / r.pre));
     total         = aft + newSh;
     const roundPct = newSh / total;
 
