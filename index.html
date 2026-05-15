@@ -77,59 +77,30 @@
     padding: 40px 24px 80px;
   }
 
-  .header { margin-bottom: 24px; }
-  .header h1 {
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: -.3px;
+  /* Header & Icon */
+  .header { position: relative; margin-bottom: 28px; padding-right: 50px; }
+  .header h1 { font-size: 22px; font-weight: 600; color: var(--text); letter-spacing: -.3px; }
+  .header p { font-size: 13px; color: var(--text2); margin-top: 6px; }
+  
+  .gh-trigger {
+    position: absolute; top: -4px; right: 0;
+    width: 38px; height: 38px;
+    border: 1px solid var(--border); border-radius: 50%;
+    background: var(--surface); color: var(--text2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all .2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   }
-  .header p {
-    font-size: 13px;
-    color: var(--text2);
-    margin-top: 6px;
-  }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    margin-bottom: 16px;
+  .gh-trigger:hover {
+    color: var(--purple); border-color: var(--purple-mid); background: var(--purple-light);
+    transform: translateY(-2px); box-shadow: 0 4px 8px rgba(107,63,160,0.12);
   }
 
-  h2 {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-    color: var(--text2);
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 16px; }
+  h2 { font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text2); margin-bottom: 14px; }
+  label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
 
-  label {
-    display: block;
-    font-size: 12px;
-    color: var(--text2);
-    margin-bottom: 5px;
-  }
-
-  input, select {
-    width: 100%;
-    height: 36px;
-    padding: 0 11px;
-    font-size: 13px;
-    font-family: var(--sans);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--bg);
-    color: var(--text);
-    outline: none;
-    transition: border-color .15s;
-  }
+  input, select { width: 100%; height: 36px; padding: 0 11px; font-size: 13px; font-family: var(--sans); border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text); outline: none; transition: border-color .15s; }
   input:focus, select:focus { border-color: var(--blue); }
   input[type=number]::-webkit-inner-spin-button { opacity: .4; }
 
@@ -138,33 +109,15 @@
   .g4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
   .g5 { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; }
 
-  @media (max-width: 600px) {
-    .g2, .g3, .g4, .g5 { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 400px) {
-    .g2, .g3, .g4, .g5 { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 600px) { .g2, .g3, .g4, .g5 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 400px) { .g2, .g3, .g4, .g5 { grid-template-columns: 1fr; } }
 
-  /* Mode toggle */
   .mode-bar { display: flex; gap: 10px; margin-bottom: 16px; }
-  .mode-btn {
-    flex: 1;
-    height: 48px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    color: var(--text2);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: var(--sans);
-    transition: all .15s;
-  }
+  .mode-btn { flex: 1; height: 48px; border: 1.5px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); color: var(--text2); cursor: pointer; font-size: 14px; font-weight: 500; font-family: var(--sans); transition: all .15s; }
   .mode-btn:hover { border-color: var(--border2); color: var(--text); }
   .mode-btn.active-direct { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
   .mode-btn.active-lp { border-color: var(--green); background: var(--green-light); color: var(--green); }
 
-  /* Catch-up toggle */
   .catchup-bar { display: flex; gap: 0; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px; width: fit-content; margin-top: 14px; }
   .catchup-btn { height: 30px; padding: 0 14px; border: none; border-radius: 6px; background: transparent; color: var(--text2); cursor: pointer; font-size: 12.5px; font-weight: 500; font-family: var(--sans); transition: all .15s; white-space: nowrap; }
   .catchup-btn:hover { color: var(--text); }
@@ -180,7 +133,6 @@
   .mode-none .catchup-step-num { background: var(--border2); color: var(--text2); }
   .mode-full .catchup-step-num { background: var(--purple); color: #fff; }
 
-  /* Round rows */
   .round-row { display: grid; grid-template-columns: 100px 1fr 1fr 1fr 36px; gap: 10px; align-items: end; margin-bottom: 10px; }
   @media (max-width: 600px) { .round-row { grid-template-columns: 1fr 1fr; } .round-row .del-col { display: none; } }
 
@@ -193,18 +145,15 @@
   .btn-calc { height: 42px; padding: 0 32px; font-size: 15px; background: var(--blue); color: #fff; border-color: var(--blue); }
   .btn-calc:hover { opacity: .88; }
 
-  /* Info box */
   .info-box { padding: 11px 14px; border-radius: var(--radius); font-size: 12px; background: var(--blue-light); border: 1px solid var(--blue-mid); color: var(--blue); line-height: 1.7; margin-top: 10px; }
   .note { font-size: 11.5px; color: var(--text3); margin-top: 8px; line-height: 1.65; }
   .alert { padding: 11px 14px; border-radius: var(--radius); font-size: 13px; background: var(--red-light); border: 1px solid #f09595; color: var(--red); margin-bottom: 14px; display: none; }
 
-  /* Metric cards */
   .metric-card { background: var(--surface2); border-radius: var(--radius); padding: 14px 16px; }
   .metric-label { font-size: 11px; color: var(--text2); margin-bottom: 6px; }
   .metric-val { font-size: 20px; font-weight: 600; font-family: var(--mono); color: var(--text); }
   .metric-val.blue { color: var(--blue); } .metric-val.green { color: var(--green); } .metric-val.amber { color: var(--amber); } .metric-val.red { color: var(--red); } .metric-val.purple { color: var(--purple); }
 
-  /* Waterfall table */
   .wf-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
   .wf-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
   .wf-table td:last-child { text-align: right; font-family: var(--mono); font-size: 12.5px; font-weight: 500; white-space: nowrap; }
@@ -217,7 +166,6 @@
   .neg { color: var(--red); } .pos { color: var(--green); } .neutral { color: var(--text2); } .purple { color: var(--purple); }
   .cu-badge { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 20px; margin-left: 6px; vertical-align: middle; font-weight: 600; background: var(--purple-mid); color: var(--purple); letter-spacing: .03em; }
 
-  /* Cap table */
   .ct { width: 100%; border-collapse: collapse; font-size: 12px; }
   .ct th { text-align: left; padding: 8px 10px; color: var(--text2); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--border); white-space: nowrap; }
   .ct td { padding: 7px 10px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
@@ -234,79 +182,63 @@
   .leg-dot { width: 10px; height: 3px; border-radius: 2px; display: inline-block; }
 
   .hidden { display: none; }
-  .sep { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
   .section-divider { display: flex; align-items: center; gap: 10px; margin: 16px 0 12px; font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; }
   .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   footer { text-align: center; font-size: 11.5px; color: var(--text3); margin-top: 48px; line-height: 1.8; }
   footer a { color: var(--text2); text-decoration: none; } footer a:hover { text-decoration: underline; }
+
+  /* GitHub Modal (Suspended) */
+  .gh-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.35); backdrop-filter: blur(3px);
+    z-index: 999; display: none; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; transition: opacity .2s ease;
+  }
+  .gh-backdrop.show { display: flex; opacity: 1; }
+
+  .gh-modal {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    width: 100%; max-width: 440px; box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+    transform: scale(0.95) translateY(10px); transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden; display: flex; flex-direction: column;
+  }
+  .gh-backdrop.show .gh-modal { transform: scale(1) translateY(0); }
+
+  .gh-modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--surface2);
+  }
+  .gh-modal-header h3 { font-size: 15px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; margin: 0; }
+  .gh-close { background: none; border: none; font-size: 18px; color: var(--text3); cursor: pointer; padding: 4px; line-height: 1; border-radius: 4px; }
+  .gh-close:hover { background: var(--border); color: var(--text); }
+
+  .gh-modal-body { padding: 20px; }
+  .gh-modal-body label { font-size: 12.5px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+
+  details.gh-settings { margin-top: 24px; border-top: 1px dashed var(--border2); padding-top: 16px; }
+  details.gh-settings summary { font-size: 12px; font-weight: 600; color: var(--text2); cursor: pointer; outline: none; list-style: none; display: flex; align-items: center; gap: 6px; user-select: none; }
+  details.gh-settings summary::-webkit-details-marker { display: none; }
+  details.gh-settings summary:hover { color: var(--text); }
+  details.gh-settings[open] summary { color: var(--purple); margin-bottom: 14px; }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- Header -->
+  <!-- Header & Floating Icon -->
   <div class="header">
     <h1>一级市场 Cap Table 收益率计算器</h1>
     <p>支持任意轮次入场 · 直投与 LP 跟投两种模式 · 含稀释、税收、管理费及 Carry 完整拆解</p>
-  </div>
-
-  <!-- 新增：全折叠 GitHub API 模块 -->
-  <div class="card" style="border-color: var(--purple-mid); background: var(--purple-light); box-shadow: 0 2px 8px rgba(107,63,160,0.05); padding: 18px 24px; transition: all 0.2s ease;">
     
-    <!-- 标题栏与整行可点击区域 -->
-    <div style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none;" onclick="toggleGHSetup()">
-      <h2 style="color: var(--purple); margin-bottom:0; display:flex; align-items:center;">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="margin-right:8px;"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-        云端模型存档与读取 (GitHub API)
-      </h2>
-      <span id="gh-setup-icon" style="color:var(--purple); font-size:12.5px; opacity:0.85; font-weight:500;">▼ 点击展开面板</span>
-    </div>
-
-    <!-- 全部操作与配置内容 (默认隐藏) -->
-    <div id="gh-setup-body" style="display:none; margin-top:18px; padding-top:16px; border-top:1px dashed var(--purple-mid);">
-      
-      <!-- 常用操作区 -->
-      <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin-bottom:18px;">
-        <div style="flex:1; min-width:200px;">
-          <label style="color:var(--purple); font-weight:600;">操作目标：公司名称</label>
-          <input type="text" id="gh-company" placeholder="例如: ByteDance" style="border-color:var(--purple); box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
-        </div>
-        <button class="btn" style="border-color:var(--purple);color:var(--purple);" onclick="saveToGitHub()">↑ 保存当前配置</button>
-        <button class="btn" onclick="loadFromGitHub()">↓ 从云端提取</button>
-        <button class="btn" onclick="listGitHubModels()">≡ 存档列表</button>
-      </div>
-
-      <!-- 接口配置区 -->
-      <div class="g3">
-        <div>
-          <label>GitHub Token (需 repo 权限)</label>
-          <input type="password" id="gh-token" placeholder="ghp_xxxx..." onchange="saveGHCreds()">
-        </div>
-        <div>
-          <label>用户名或组织 (Owner)</label>
-          <input type="text" id="gh-owner" placeholder="例如: yourname" onchange="saveGHCreds()">
-        </div>
-        <div>
-          <label>仓库名 (Repository)</label>
-          <input type="text" id="gh-repo" placeholder="例如: val-models" onchange="saveGHCreds()">
-        </div>
-      </div>
-      <p class="note" style="color:var(--purple); margin-top:10px; opacity:0.8;">注：Token 仅保存在你的浏览器本地缓存中，不会被上传。数据将以 JSON 格式存放在你设定仓库的 <code>models/</code> 目录下。</p>
-      
-      <!-- 提示信息框 -->
-      <div id="gh-msg" style="margin-top:14px;font-size:12px;display:none;padding:10px 14px;border-radius:6px;word-break:break-all;"></div>
-    </div>
+    <button class="gh-trigger" onclick="openGHModal()" title="云端存档 (GitHub)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+    </button>
   </div>
 
   <!-- Mode -->
   <div class="mode-bar">
-    <button class="mode-btn active-direct" id="btn-direct" onclick="setMode('direct')">
-      直投 Direct Investment
-    </button>
-    <button class="mode-btn" id="btn-lp" onclick="setMode('lp')">
-      LP 跟投 Co-investment
-    </button>
+    <button class="mode-btn active-direct" id="btn-direct" onclick="setMode('direct')">直投 Direct Investment</button>
+    <button class="mode-btn" id="btn-lp" onclick="setMode('lp')">LP 跟投 Co-investment</button>
   </div>
 
   <!-- Rounds -->
@@ -323,18 +255,9 @@
   <div class="card">
     <h2>您的投资信息</h2>
     <div class="g3">
-      <div>
-        <label>参与轮次（您入场的轮次）</label>
-        <select id="u-round"></select>
-      </div>
-      <div>
-        <label>认缴 / 投资金额（万元）</label>
-        <input type="number" id="u-invest" value="500" min="1">
-      </div>
-      <div>
-        <label>持有至退出年数</label>
-        <input type="number" id="u-years" value="5" min="0.5" step="0.5">
-      </div>
+      <div><label>参与轮次（您入场的轮次）</label><select id="u-round"></select></div>
+      <div><label>认缴 / 投资金额（万元）</label><input type="number" id="u-invest" value="500" min="1"></div>
+      <div><label>持有至退出年数</label><input type="number" id="u-years" value="5" min="0.5" step="0.5"></div>
     </div>
   </div>
 
@@ -342,109 +265,38 @@
   <div class="card hidden" id="lp-card">
     <h2>基金条款（LP 跟投）</h2>
     <div class="g4">
-      <div>
-        <label>年管理费率（%）</label>
-        <input type="number" id="lp-fee" value="2" min="0" max="5" step="0.1">
-      </div>
-      <div>
-        <label>管理费收费基数</label>
-        <select id="lp-fee-base">
-          <option value="commit">认缴金额</option>
-          <option value="invest">实投金额</option>
-        </select>
-      </div>
-      <div>
-        <label>门槛收益率 Hurdle（%/年）</label>
-        <input type="number" id="lp-hurdle" value="8" min="0" max="20" step="0.5">
-      </div>
-      <div>
-        <label>超额分成 Carry（%）</label>
-        <input type="number" id="lp-carry" value="20" min="0" max="30" step="1">
-      </div>
+      <div><label>年管理费率（%）</label><input type="number" id="lp-fee" value="2" min="0" max="5" step="0.1"></div>
+      <div><label>管理费收费基数</label><select id="lp-fee-base"><option value="commit">认缴金额</option><option value="invest">实投金额</option></select></div>
+      <div><label>门槛收益率 Hurdle（%/年）</label><input type="number" id="lp-hurdle" value="8" min="0" max="20" step="0.5"></div>
+      <div><label>超额分成 Carry（%）</label><input type="number" id="lp-carry" value="20" min="0" max="30" step="1"></div>
     </div>
-
-    <!-- Catch-up toggle -->
     <div class="section-divider">GP Catch-up 机制</div>
-    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-      <div class="catchup-bar">
-        <button class="catchup-btn active-none" id="cu-btn-none" onclick="setCatchup('none')">
-          无 Catch-up（标准欧洲瀑布）
-        </button>
-        <button class="catchup-btn" id="cu-btn-full" onclick="setCatchup('full')">
-          有 Catch-up（100% GP Catch-up）
-        </button>
-      </div>
+    <div class="catchup-bar">
+      <button class="catchup-btn active-none" id="cu-btn-none" onclick="setCatchup('none')">无 Catch-up（标准欧洲瀑布）</button>
+      <button class="catchup-btn" id="cu-btn-full" onclick="setCatchup('full')">有 Catch-up（100% GP Catch-up）</button>
     </div>
-
-    <!-- Catch-up explanation box -->
-    <div class="catchup-box mode-none visible" id="cu-box">
-      <div style="font-weight:600;margin-bottom:8px;font-size:12px;">无 Catch-up — 欧洲瀑布标准模式</div>
-      <div class="catchup-step"><div class="catchup-step-num">①</div><div>LP 优先收回全部本金（Return of Capital）</div></div>
-      <div class="catchup-step"><div class="catchup-step-num">②</div><div>LP 优先获得门槛收益（Preferred Return）：本金 × (1+Hurdle)^年</div></div>
-      <div class="catchup-step"><div class="catchup-step-num">③</div><div>剩余超额利润按 <strong>(1−Carry%) : Carry%</strong> 在 LP / GP 之间分配</div></div>
-      <div style="margin-top:8px;font-size:11px;opacity:.75;">→ GP 的 Carry 仅计算"超过门槛"的那部分利润，对门槛以内收益不参与分配</div>
-    </div>
-
-    <p class="note" style="margin-top:10px">
-      · 管理费从认缴资金中扣除，在投资前即产生，不计入被投企业股权<br>
-      · Carry 采用欧洲瀑布（European Waterfall）；Catch-up 选项可切换两种常见结构
-    </p>
+    <div class="catchup-box mode-none visible" id="cu-box"></div>
+    <p class="note" style="margin-top:10px">· 管理费从认缴资金中扣除，在投资前即产生，不计入被投企业股权<br>· Carry 采用欧洲瀑布；Catch-up 选项可切换两种常见结构</p>
   </div>
 
   <!-- Tax -->
   <div class="card">
     <h2>税收设置</h2>
-
     <div id="direct-tax">
       <div class="g3">
-        <div>
-          <label>退出方式</label>
-          <select id="exit-type">
-            <option value="open">二级市场减持（A股）</option>
-            <option value="transfer">股权转让 / 境外上市减持</option>
-          </select>
-        </div>
-        <div>
-          <label>投资主体</label>
-          <select id="investor-type" onchange="updateTaxHint()">
-            <option value="individual">个人（自然人）</option>
-            <option value="corp">企业法人</option>
-            <option value="fund">合伙制基金</option>
-          </select>
-        </div>
-        <div>
-          <label>适用税率（%，可手动修改）</label>
-          <input type="number" id="tax-rate" value="20" min="0" max="45" step="1">
-        </div>
+        <div><label>退出方式</label><select id="exit-type"><option value="open">二级市场减持（A股）</option><option value="transfer">股权转让 / 境外上市减持</option></select></div>
+        <div><label>投资主体</label><select id="investor-type" onchange="updateTaxHint()"><option value="individual">个人（自然人）</option><option value="corp">企业法人</option><option value="fund">合伙制基金</option></select></div>
+        <div><label>适用税率（%，可手动修改）</label><input type="number" id="tax-rate" value="20" min="0" max="45" step="1"></div>
       </div>
       <div class="info-box" id="tax-hint"></div>
     </div>
-
     <div id="lp-tax-sec" class="hidden">
       <div class="g3">
-        <div>
-          <label>LP 分配适用税率（%）</label>
-          <input type="number" id="lp-tax" value="20" min="0" max="45" step="1">
-        </div>
-        <div>
-          <label>计税基数</label>
-          <select id="lp-tax-base">
-            <option value="gain">分配额 − 成本（仅计增益部分）</option>
-            <option value="total">分配总额</option>
-          </select>
-        </div>
-        <div>
-          <label>投资主体（LP）</label>
-          <select id="lp-investor-type">
-            <option value="individual">个人自然人</option>
-            <option value="corp">法人合伙人</option>
-          </select>
-        </div>
+        <div><label>LP 分配适用税率（%）</label><input type="number" id="lp-tax" value="20" min="0" max="45" step="1"></div>
+        <div><label>计税基数</label><select id="lp-tax-base"><option value="gain">分配额 − 成本（仅计增益部分）</option><option value="total">分配总额</option></select></div>
+        <div><label>投资主体（LP）</label><select id="lp-investor-type"><option value="individual">个人自然人</option><option value="corp">法人合伙人</option></select></div>
       </div>
-      <p class="note" style="margin-top:10px">
-        · 个人 LP：基金分配后按 20% 个人所得税；部分地区对股权投资基金有核定征收优惠<br>
-        · 法人合伙人：分配并入企业所得税，一般税率 25%；高新技术企业 15%
-      </p>
+      <p class="note" style="margin-top:10px">· 个人 LP：基金分配后按 20% 个人所得税；部分地区对股权投资基金有核定征收优惠<br>· 法人合伙人：分配并入企业所得税，一般税率 25%；高新技术企业 15%</p>
     </div>
   </div>
 
@@ -452,23 +304,12 @@
   <div class="card">
     <h2>IPO 退出设置</h2>
     <div class="g3">
-      <div>
-        <label>IPO 发行后总市值（万元）</label>
-        <input type="number" id="ipo-val" value="150000" min="1">
-      </div>
-      <div>
-        <label>IPO 本次募资额（万元）</label>
-        <input type="number" id="ipo-raise" value="30000" min="0">
-      </div>
-      <div>
-        <label>IPO 新增期权池（%）</label>
-        <input type="number" id="ipo-esop" value="0" min="0" max="20" step="0.5">
-      </div>
+      <div><label>IPO 发行后总市值（万元）</label><input type="number" id="ipo-val" value="150000" min="1"></div>
+      <div><label>IPO 本次募资额（万元）</label><input type="number" id="ipo-raise" value="30000" min="0"></div>
+      <div><label>IPO 新增期权池（%）</label><input type="number" id="ipo-esop" value="0" min="0" max="20" step="0.5"></div>
     </div>
-    <p class="note">· 投前估值 = IPO 总市值 − IPO 募资额；新增股份比例 = 募资额 ÷ 总市值</p>
   </div>
 
-  <!-- Error -->
   <div class="alert" id="err"></div>
 
   <!-- Calculate button -->
@@ -479,54 +320,23 @@
 
   <!-- Results -->
   <div id="results" class="hidden">
-    <!-- Metrics -->
     <div class="card">
       <h2>退出收益摘要</h2>
       <div class="g5" id="metrics" style="margin-bottom:0"></div>
     </div>
-
-    <!-- Waterfall -->
     <div class="card">
       <h2 id="wf-title">收益瀑布拆解</h2>
       <table class="wf-table" id="wfall"></table>
     </div>
-
-    <!-- Cap Table -->
     <div class="card">
       <h2>Cap Table 演变（完全稀释口径）</h2>
       <div style="overflow-x:auto">
         <table class="ct" id="cap-t">
-          <thead>
-            <tr>
-              <th>轮次</th>
-              <th style="text-align:right">投前估值</th>
-              <th style="text-align:right">融资额</th>
-              <th style="text-align:right">投后估值</th>
-              <th style="text-align:right">总股本</th>
-              <th style="text-align:right">本轮投资方%</th>
-              <th style="text-align:right">您的持股%</th>
-            </tr>
-          </thead>
+          <thead><tr><th>轮次</th><th style="text-align:right">投前估值</th><th style="text-align:right">融资额</th><th style="text-align:right">投后估值</th><th style="text-align:right">总股本</th><th style="text-align:right">本轮投资方%</th><th style="text-align:right">您的持股%</th></tr></thead>
           <tbody id="cap-b"></tbody>
         </table>
       </div>
-      <div class="chart-wrap">
-        <canvas id="ch"></canvas>
-      </div>
-      <div class="legend">
-        <span><span class="leg-dot" style="background:#378add"></span>您的持股比例</span>
-        <span><span class="leg-dot" style="background:#ef9f27;border-top:2px dashed #ef9f27;background:none;height:0;margin-top:1px"></span>本轮新投资方占比</span>
-      </div>
-    </div>
-
-    <!-- Methodology -->
-    <div class="card" style="background:var(--surface2)">
-      <h2>计算方法说明</h2>
-      <div style="font-size:12.5px;color:var(--text2);line-height:1.9">
-        <p><strong style="color:var(--text)">稀释机制：</strong>每轮融资采用"先扩期权池再计算本轮投资方占比"的标准 pre-money ESOP 逻辑，确保期权池稀释由老股东承担。</p>
-        <p style="margin-top:8px"><strong style="color:var(--text)">无 Catch-up（欧洲瀑布标准）：</strong>① 返还本金 → ② LP 获门槛收益 → ③ 超出门槛部分按 (1−c)/c 分配。Carry 仅计算超过门槛的那部分利润。</p>
-        <p style="margin-top:8px"><strong style="color:var(--text)">有 Catch-up（100% GP Catch-up）：</strong>① 返还本金 → ② LP 获门槛收益 → ③ GP 独享 100% 直到其累计获得"全部利润的 Carry%" → ④ 剩余部分按 (1−c)/c 分配。最终 GP 实际获得全部利润的 Carry%。</p>
-      </div>
+      <div class="chart-wrap"><canvas id="ch"></canvas></div>
     </div>
   </div>
 
@@ -535,6 +345,57 @@
     <p style="margin-top:4px">纯本地计算 + GitHub云端存取</p>
   </footer>
 
+</div>
+
+<!-- GitHub Modal Backdrop & Window -->
+<div id="gh-modal-backdrop" class="gh-backdrop" onclick="closeGHModal(event)">
+  <div class="gh-modal" onclick="event.stopPropagation()">
+    
+    <div class="gh-modal-header">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        云端模型存档
+      </h3>
+      <button class="gh-close" onclick="closeGHModal(null, true)">✕</button>
+    </div>
+
+    <div class="gh-modal-body">
+      <div>
+        <label>操作目标：公司名称</label>
+        <input type="text" id="gh-company" placeholder="例如: ByteDance" style="border-color:var(--purple); box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);">
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button class="btn" style="flex:1; border-color:var(--purple); color:var(--purple);" onclick="saveToGitHub()">↑ 保存</button>
+        <button class="btn" style="flex:1;" onclick="loadFromGitHub()">↓ 读取</button>
+        <button class="btn" style="flex:1;" onclick="listGitHubModels()">≡ 列表</button>
+      </div>
+
+      <div id="gh-msg" style="margin-top:14px; font-size:12px; display:none; padding:10px 12px; border-radius:6px; word-break:break-all;"></div>
+
+      <details id="gh-settings" class="gh-settings">
+        <summary>⚙️ 展开 GitHub 接口配置</summary>
+        <div style="display:flex; flex-direction:column; gap:10px; margin-top:4px;">
+          <div>
+            <label style="font-weight:400; color:var(--text2);">GitHub Token (需 repo 权限)</label>
+            <input type="password" id="gh-token" placeholder="ghp_xxxx..." onchange="saveGHCreds()">
+          </div>
+          <div style="display:flex; gap:10px;">
+            <div style="flex:1;">
+              <label style="font-weight:400; color:var(--text2);">用户名 (Owner)</label>
+              <input type="text" id="gh-owner" placeholder="例如: yourname" onchange="saveGHCreds()">
+            </div>
+            <div style="flex:1;">
+              <label style="font-weight:400; color:var(--text2);">仓库名 (Repo)</label>
+              <input type="text" id="gh-repo" placeholder="例如: val-models" onchange="saveGHCreds()">
+            </div>
+          </div>
+          <p class="note" style="margin-top:2px;">Token 仅缓存在浏览器本地，文件存放在仓库的 <code>models/</code> 下。</p>
+        </div>
+      </details>
+    </div>
+
+  </div>
 </div>
 
 <script>
@@ -551,19 +412,23 @@ let rounds  = [
 let chartInst = null;
 
 /* ============================================================
-   GitHub API 存储和读取功能
+   GitHub Modal & API Logic
    ============================================================ */
 
-// 展开/收起设置面板
-function toggleGHSetup() {
-  const body = document.getElementById('gh-setup-body');
-  const icon = document.getElementById('gh-setup-icon');
-  if (body.style.display === 'none') {
-    body.style.display = 'block';
-    icon.textContent = '▲ 收起面板';
-  } else {
-    body.style.display = 'none';
-    icon.textContent = '▼ 点击展开面板';
+function openGHModal() {
+  document.getElementById('gh-modal-backdrop').classList.add('show');
+  
+  // 如果本地没有配置，自动展开设置面板
+  if (!document.getElementById('gh-token').value) {
+    document.getElementById('gh-settings').open = true;
+  }
+}
+
+function closeGHModal(e, force = false) {
+  if (force || e.target.id === 'gh-modal-backdrop') {
+    document.getElementById('gh-modal-backdrop').classList.remove('show');
+    // 隐藏消息以免下次打开时还在
+    setTimeout(() => { document.getElementById('gh-msg').style.display = 'none'; }, 200);
   }
 }
 
@@ -577,10 +442,8 @@ function loadGHCreds() {
   document.getElementById('gh-token').value = localStorage.getItem('gh-token') || '';
   document.getElementById('gh-owner').value = localStorage.getItem('gh-owner') || '';
   document.getElementById('gh-repo').value  = localStorage.getItem('gh-repo') || '';
-  // 面板默认保持折叠，保持界面清爽
 }
 
-// 提取和复原全部需要的 input id
 const INPUTS_TO_SAVE = [
   'u-invest', 'u-years', 'u-round',
   'lp-fee', 'lp-fee-base', 'lp-hurdle', 'lp-carry',
@@ -616,22 +479,22 @@ function applyModelData(jsonStr) {
     }
     updateTaxHint();
     calc();
-    showGHMsg('🎉 模型数据读取成功！图表已更新。', 'pos');
+    showGHMsg('🎉 模型数据读取成功！底层页面已刷新。', 'pos');
   } catch (e) {
     showGHMsg(`解析模型数据失败: ${e.message}`, 'neg');
   }
 }
 
-// Base64 对中文的安全编解码
 function utoa(str) { return btoa(unescape(encodeURIComponent(str))); }
 function atou(b64) { return decodeURIComponent(escape(atob(b64))); }
 
 function ghApiDetails() {
-  const token = document.getElementById('gh-token').value.trim();
-  const owner = document.getElementById('gh-owner').value.trim();
-  const repo = document.getElementById('gh-repo').value.trim();
-  const company = document.getElementById('gh-company').value.trim();
-  return { token, owner, repo, company };
+  return {
+    token: document.getElementById('gh-token').value.trim(),
+    owner: document.getElementById('gh-owner').value.trim(),
+    repo: document.getElementById('gh-repo').value.trim(),
+    company: document.getElementById('gh-company').value.trim()
+  };
 }
 
 function showGHMsg(msg, type) {
@@ -639,70 +502,56 @@ function showGHMsg(msg, type) {
   d.style.display = 'block';
   d.textContent = msg;
   if (type === 'pos') {
-    d.style.backgroundColor = 'var(--green-light)';
-    d.style.color = 'var(--green)';
-    d.style.borderColor = 'var(--green-mid)';
+    d.style.backgroundColor = 'var(--green-light)'; d.style.color = 'var(--green)'; d.style.border = '1px solid var(--green-mid)';
   } else if (type === 'neg') {
-    d.style.backgroundColor = 'var(--red-light)';
-    d.style.color = 'var(--red)';
-    d.style.borderColor = 'var(--red)';
+    d.style.backgroundColor = 'var(--red-light)'; d.style.color = 'var(--red)'; d.style.border = '1px solid var(--red)';
   } else {
-    d.style.backgroundColor = 'var(--surface2)';
-    d.style.color = 'var(--text2)';
-    d.style.borderColor = 'var(--border2)';
+    d.style.backgroundColor = 'var(--surface2)'; d.style.color = 'var(--text2)'; d.style.border = '1px solid var(--border2)';
   }
 }
 
+function checkConfig() {
+  const { token, owner, repo } = ghApiDetails();
+  if (!token || !owner || !repo) {
+    document.getElementById('gh-settings').open = true;
+    showGHMsg('❌ 请先完整填写下方的 GitHub 接口配置信息。', 'neg');
+    return false;
+  }
+  return true;
+}
+
 async function ghFetch(url, method = 'GET', body = null, token) {
-  const headers = {
-    'Accept': 'application/vnd.github.v3+json',
-    'Authorization': `Bearer ${token}`
-  };
-  const opts = { method, headers };
+  const opts = { method, headers: { 'Accept': 'application/vnd.github.v3+json', 'Authorization': `Bearer ${token}` } };
   if (body) opts.body = JSON.stringify(body);
   return fetch(url, opts);
 }
 
 async function saveToGitHub() {
+  if (!checkConfig()) return;
   const { token, owner, repo, company } = ghApiDetails();
   if (!company) return showGHMsg('❌ 请先填写要保存的【公司名称】', 'neg');
-  if (!token || !owner || !repo) return showGHMsg('❌ 请完整填写 GitHub Token、Owner 和 Repo 等接口配置', 'neg');
 
   const path = `models/${company}.json`;
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-  const content = utoa(getModelData());
 
   showGHMsg('⏳ 正在连接 GitHub 保存...', 'neutral');
   try {
     const getRes = await ghFetch(url, 'GET', null, token);
     let sha = undefined;
-    if (getRes.ok) {
-      const data = await getRes.json();
-      sha = data.sha;
-    }
+    if (getRes.ok) sha = (await getRes.json()).sha;
 
-    const body = {
-      message: `Save/Update valuation model for ${company}`,
-      content: content,
-      ...(sha && { sha })
-    };
-
+    const body = { message: `Save/Update valuation model for ${company}`, content: utoa(getModelData()), ...(sha && { sha }) };
     const putRes = await ghFetch(url, 'PUT', body, token);
-    if (putRes.ok) {
-      showGHMsg(`✅ 成功保存公司 [${company}] 的估值模型！`, 'pos');
-    } else {
-      const err = await putRes.json();
-      showGHMsg(`❌ 保存失败: ${err.message}`, 'neg');
-    }
-  } catch (e) {
-    showGHMsg(`❌ 网络请求失败: ${e.message}`, 'neg');
-  }
+    
+    if (putRes.ok) showGHMsg(`✅ 成功保存公司 [${company}] 的估值模型！`, 'pos');
+    else showGHMsg(`❌ 保存失败: ${(await putRes.json()).message}`, 'neg');
+  } catch (e) { showGHMsg(`❌ 网络请求失败: ${e.message}`, 'neg'); }
 }
 
 async function loadFromGitHub() {
+  if (!checkConfig()) return;
   const { token, owner, repo, company } = ghApiDetails();
   if (!company) return showGHMsg('❌ 请先填写你要读取的【公司名称】', 'neg');
-  if (!token || !owner || !repo) return showGHMsg('❌ 请完整填写 GitHub 配置信息', 'neg');
 
   const path = `models/${company}.json`;
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
@@ -711,52 +560,37 @@ async function loadFromGitHub() {
   try {
     const res = await ghFetch(url, 'GET', null, token);
     if (res.ok) {
-      const data = await res.json();
-      const jsonStr = atou(data.content);
-      applyModelData(jsonStr);
+      applyModelData(atou((await res.json()).content));
     } else if (res.status === 404) {
-      showGHMsg(`❌ 未在仓库中找到名为 [${company}] 的存档。你可以点击“存档列表”查看已有文件。`, 'neg');
+      showGHMsg(`❌ 未找到 [${company}] 的存档。可点击“列表”查看。`, 'neg');
     } else {
-      const err = await res.json();
-      showGHMsg(`❌ 读取失败: ${err.message}`, 'neg');
+      showGHMsg(`❌ 读取失败: ${(await res.json()).message}`, 'neg');
     }
-  } catch (e) {
-    showGHMsg(`❌ 网络请求失败: ${e.message}`, 'neg');
-  }
+  } catch (e) { showGHMsg(`❌ 网络请求失败: ${e.message}`, 'neg'); }
 }
 
 async function listGitHubModels() {
+  if (!checkConfig()) return;
   const { token, owner, repo } = ghApiDetails();
-  if (!token || !owner || !repo) return showGHMsg('❌ 请完整填写 GitHub 接口信息以获取列表', 'neg');
-
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/models`;
+
   showGHMsg('⏳ 正在拉取公司列表...', 'neutral');
   try {
     const res = await ghFetch(url, 'GET', null, token);
     if (res.ok) {
-      const data = await res.json();
-      const files = data
-        .filter(f => f.name.endsWith('.json'))
-        .map(f => f.name.replace('.json', ''));
-        
-      if (files.length === 0) {
-        showGHMsg('云端 models/ 文件夹暂无任何 JSON 存档。', 'neutral');
-      } else {
-        showGHMsg(`已存档的公司模型: ${files.join(', ')}`, 'pos');
-      }
+      const files = (await res.json()).filter(f => f.name.endsWith('.json')).map(f => f.name.replace('.json', ''));
+      if (files.length === 0) showGHMsg('云端 models/ 文件夹暂无任何存档。', 'neutral');
+      else showGHMsg(`已存档模型: ${files.join(', ')}`, 'pos');
     } else if (res.status === 404) {
       showGHMsg('尚未建立任何存档（找不到 models 目录）。请先保存一个公司模型。', 'neutral');
     } else {
-      const err = await res.json();
-      showGHMsg(`获取列表失败: ${err.message}`, 'neg');
+      showGHMsg(`获取列表失败: ${(await res.json()).message}`, 'neg');
     }
-  } catch (e) {
-    showGHMsg(`网络请求失败: ${e.message}`, 'neg');
-  }
+  } catch (e) { showGHMsg(`网络请求失败: ${e.message}`, 'neg'); }
 }
 
 /* ============================================================
-   Mode
+   Mode / UI / Formatter Re-implementations
    ============================================================ */
 function setMode(m) {
   mode = m;
@@ -767,15 +601,11 @@ function setMode(m) {
   document.getElementById('lp-tax-sec').className = m === 'lp'     ? '' : 'hidden';
 }
 
-/* ============================================================
-   Catch-up toggle
-   ============================================================ */
 const CU_CONTENT = {
   none: {
     btnClass: 'active-none',
     boxClass: 'catchup-box mode-none visible',
-    html: `
-      <div style="font-weight:600;margin-bottom:8px;font-size:12px;">无 Catch-up — 欧洲瀑布标准模式</div>
+    html: `<div style="font-weight:600;margin-bottom:8px;font-size:12px;">无 Catch-up — 欧洲瀑布标准模式</div>
       <div class="catchup-step"><div class="catchup-step-num">①</div><div>LP 优先收回全部本金</div></div>
       <div class="catchup-step"><div class="catchup-step-num">②</div><div>LP 优先获得门槛收益：本金 × (1+Hurdle)<sup>年</sup></div></div>
       <div class="catchup-step"><div class="catchup-step-num">③</div><div>剩余超额利润按 <strong>(1−Carry%) : Carry%</strong> 在 LP / GP 之间分配</div></div>
@@ -784,8 +614,7 @@ const CU_CONTENT = {
   full: {
     btnClass: 'active-full',
     boxClass: 'catchup-box mode-full visible',
-    html: `
-      <div style="font-weight:600;margin-bottom:8px;font-size:12px;">有 Catch-up — 100% GP Catch-up 模式</div>
+    html: `<div style="font-weight:600;margin-bottom:8px;font-size:12px;">有 Catch-up — 100% GP Catch-up 模式</div>
       <div class="catchup-step"><div class="catchup-step-num">①</div><div>LP 优先收回全部本金</div></div>
       <div class="catchup-step"><div class="catchup-step-num">②</div><div>LP 优先获得门槛收益：本金 × (1+Hurdle)<sup>年</sup></div></div>
       <div class="catchup-step"><div class="catchup-step-num">③</div><div><strong>GP Catch-up：</strong>GP 独享 100% 直到 GP 累计获得量 = Carry/(1−Carry) × 门槛利润</div></div>
@@ -800,13 +629,9 @@ function setCatchup(c) {
   document.getElementById('cu-btn-none').className = 'catchup-btn' + (c === 'none' ? ' active-none' : '');
   document.getElementById('cu-btn-full').className = 'catchup-btn' + (c === 'full' ? ' active-full' : '');
   const box = document.getElementById('cu-box');
-  box.className = cu.boxClass;
-  box.innerHTML = cu.html;
+  box.className = cu.boxClass; box.innerHTML = cu.html;
 }
 
-/* ============================================================
-   Tax hints
-   ============================================================ */
 const TAX_HINTS = {
   individual: '个人直接持股：股权转让所得税率通常为 20%。A 股二级市场减持目前个人暂免征收个人所得税。',
   corp:        '企业法人：股权转让收益并入企业所得税，一般税率 25%；高新企业 15%。居民企业间直接投资持股12个月以上免税。',
@@ -815,13 +640,9 @@ const TAX_HINTS = {
 function updateTaxHint() {
   const t = document.getElementById('investor-type').value;
   document.getElementById('tax-hint').textContent = TAX_HINTS[t];
-  const rates = { individual: 20, corp: 25, fund: 20 };
-  document.getElementById('tax-rate').value = rates[t];
+  document.getElementById('tax-rate').value = { individual: 20, corp: 25, fund: 20 }[t];
 }
 
-/* ============================================================
-   Rounds UI
-   ============================================================ */
 function renderRounds() {
   const c = document.getElementById('rounds-c');
   c.innerHTML = '';
@@ -829,54 +650,28 @@ function renderRounds() {
     const d = document.createElement('div');
     d.className = 'round-row';
     d.innerHTML = `
-      <div>
-        <label>名称</label>
-        <input value="${r.name}" oninput="rounds[${i}].name=this.value;updateSel()">
-      </div>
-      <div>
-        <label>投前估值（万元）</label>
-        <input type="number" value="${r.pre}" min="1" oninput="rounds[${i}].pre=+this.value">
-      </div>
-      <div>
-        <label>本轮融资额（万元）</label>
-        <input type="number" value="${r.raise}" min="1" oninput="rounds[${i}].raise=+this.value">
-      </div>
-      <div>
-        <label>本轮新增期权池（%）</label>
-        <input type="number" value="${r.esop}" min="0" max="30" step="0.5"
-               oninput="rounds[${i}].esop=+this.value">
-      </div>
-      <div class="del-col" style="display:flex;align-items:flex-end">
-        <button class="btn btn-del" onclick="rmRound(${i})" title="删除此轮">✕</button>
-      </div>`;
+      <div><label>名称</label><input value="${r.name}" oninput="rounds[${i}].name=this.value;updateSel()"></div>
+      <div><label>投前估值（万元）</label><input type="number" value="${r.pre}" min="1" oninput="rounds[${i}].pre=+this.value"></div>
+      <div><label>本轮融资额（万元）</label><input type="number" value="${r.raise}" min="1" oninput="rounds[${i}].raise=+this.value"></div>
+      <div><label>本轮新增期权池（%）</label><input type="number" value="${r.esop}" min="0" max="30" step="0.5" oninput="rounds[${i}].esop=+this.value"></div>
+      <div class="del-col" style="display:flex;align-items:flex-end"><button class="btn btn-del" onclick="rmRound(${i})" title="删除此轮">✕</button></div>`;
     c.appendChild(d);
   });
   updateSel();
 }
-
 function updateSel() {
   const s = document.getElementById('u-round');
   const prev = s.value;
   s.innerHTML = rounds.map((r, i) => `<option value="${i}">${r.name}</option>`).join('');
   if (prev !== '' && +prev < rounds.length) s.value = prev;
 }
-
 function addRound() {
   const letters = 'ABCDEFGHIJKLMNOP';
-  const nextName = letters[rounds.length] ? letters[rounds.length] + '轮' : `第${rounds.length+1}轮`;
-  rounds.push({ name: nextName, pre: 150000, raise: 20000, esop: 0 });
+  rounds.push({ name: letters[rounds.length] ? letters[rounds.length] + '轮' : `第${rounds.length+1}轮`, pre: 150000, raise: 20000, esop: 0 });
   renderRounds();
 }
+function rmRound(i) { if (rounds.length > 1) { rounds.splice(i, 1); renderRounds(); } }
 
-function rmRound(i) {
-  if (rounds.length <= 1) return;
-  rounds.splice(i, 1);
-  renderRounds();
-}
-
-/* ============================================================
-   Formatters
-   ============================================================ */
 function fmt(n) {
   if (n === undefined || isNaN(n)) return '—';
   if (Math.abs(n) >= 100000) return (n / 10000).toFixed(2) + ' 亿';
@@ -889,175 +684,114 @@ function fmtMOIC(n)   { return n.toFixed(2) + 'x'; }
 function fmtIRR(n)    { return (n * 100).toFixed(1) + '%'; }
 function irrColor(irr){ return irr >= 0.3 ? 'green' : irr >= 0.15 ? 'amber' : irr >= 0 ? 'blue' : 'red'; }
 
-/* ============================================================
-   LP Carry Waterfall Engine
-   ============================================================ */
 function computeLPWaterfall(G, P, hurdleRate, years, carryRate, catchupMode) {
-  const H           = P * Math.pow(1 + hurdleRate, years);
-  const prefReturn  = H - P;
+  const H = P * Math.pow(1 + hurdleRate, years);
+  const prefReturn = H - P;
 
-  if (G <= P || G <= H) {
-    return { carry: 0, catchupAmt: 0, catchupThreshold: H,
-             afterCarry: G, lpGross: G, gpGross: 0,
-             hurdleAmt: H, prefReturn, hurdleHit: false, catchupHit: false };
-  }
+  if (G <= P || G <= H) return { carry: 0, catchupAmt: 0, catchupThreshold: H, afterCarry: G, lpGross: G, gpGross: 0, hurdleAmt: H, prefReturn, hurdleHit: false, catchupHit: false };
 
-  const hurdleHit = true;
   if (catchupMode === 'none') {
     const carry = (G - H) * carryRate;
-    const afterCarry = G - carry;
-    return { carry, catchupAmt: 0, catchupThreshold: H,
-             afterCarry, lpGross: afterCarry, gpGross: carry,
-             hurdleAmt: H, prefReturn, hurdleHit, catchupHit: false };
+    return { carry, catchupAmt: 0, catchupThreshold: H, afterCarry: G - carry, lpGross: G - carry, gpGross: carry, hurdleAmt: H, prefReturn, hurdleHit: true, catchupHit: false };
   } else {
     const catchupAmt = (carryRate / (1 - carryRate)) * prefReturn;
     const catchupThreshold = H + catchupAmt;
-    let carry, catchupHit;
-
-    if (G <= catchupThreshold) {
-      carry = G - H;
-      catchupHit = false;
-    } else {
-      carry = catchupAmt + (G - catchupThreshold) * carryRate;
-      catchupHit = true;
-    }
-
-    const afterCarry = G - carry;
-    return { carry, catchupAmt, catchupThreshold,
-             afterCarry, lpGross: afterCarry, gpGross: carry,
-             hurdleAmt: H, prefReturn, hurdleHit, catchupHit };
+    let carry = G <= catchupThreshold ? G - H : catchupAmt + (G - catchupThreshold) * carryRate;
+    return { carry, catchupAmt, catchupThreshold, afterCarry: G - carry, lpGross: G - carry, gpGross: carry, hurdleAmt: H, prefReturn, hurdleHit: true, catchupHit: G > catchupThreshold };
   }
 }
 
-/* ============================================================
-   Core calculation
-   ============================================================ */
 function calc() {
   document.getElementById('err').style.display = 'none';
 
-  const uIdx    = +document.getElementById('u-round').value;
+  const uIdx = +document.getElementById('u-round').value;
   const uInvest = +document.getElementById('u-invest').value;
-  const uYears  = +document.getElementById('u-years').value;
-  const ipoVal  = +document.getElementById('ipo-val').value;
+  const uYears = +document.getElementById('u-years').value;
+  const ipoVal = +document.getElementById('ipo-val').value;
   const ipoRaise= +document.getElementById('ipo-raise').value;
   const ipoEsop = +document.getElementById('ipo-esop').value / 100;
 
   if (!uInvest || !uYears || !ipoVal) { showErr('请填写完整的投资金额、持有年数和 IPO 退出估值'); return; }
-  if (ipoRaise >= ipoVal)              { showErr('IPO 募资额不能大于等于 IPO 总估值'); return; }
+  if (ipoRaise >= ipoVal) { showErr('IPO 募资额不能大于等于 IPO 总估值'); return; }
 
   const allR = [ ...rounds, { name: 'IPO', pre: ipoVal - ipoRaise, raise: ipoRaise, esop: ipoEsop * 100 } ];
-
-  const BASE_SHARES = 10_000_000;
-  let total = BASE_SHARES;
-  let userShares = 0;
+  let total = 10_000_000, userShares = 0;
   const rows = [], labels = [], chartUser = [], chartNew = [];
 
   allR.forEach((r, idx) => {
-    const esopF   = r.esop / 100;
-    const esopSh  = Math.round(total * esopF / (1 - esopF));
-    const aft     = total + esopSh;
-    const postVal = r.pre + r.raise;
-    const newSh   = Math.round(aft * (r.raise / r.pre));
-    total         = aft + newSh;
+    const esopF = r.esop / 100;
+    const aft = total + Math.round(total * esopF / (1 - esopF));
+    const newSh = Math.round(aft * (r.raise / r.pre));
+    total = aft + newSh;
     const roundPct = newSh / total;
 
-    if (idx === uIdx) {
-      const ratio = uInvest / r.raise;
-      userShares  = Math.round(newSh * ratio);
-    }
+    if (idx === uIdx) userShares = Math.round(newSh * (uInvest / r.raise));
 
     const uPct = userShares / total;
-    rows.push({
-      name: r.name, isU: idx === uIdx, isIPO: idx === allR.length - 1,
-      pre: r.pre, raise: r.raise, post: postVal, total, roundPct, uPct
-    });
-    labels.push(r.name);
-    chartUser.push(+(uPct * 100).toFixed(3));
-    chartNew.push(+(roundPct * 100).toFixed(3));
+    rows.push({ name: r.name, isU: idx === uIdx, isIPO: idx === allR.length - 1, pre: r.pre, raise: r.raise, post: r.pre + r.raise, total, roundPct, uPct });
+    labels.push(r.name); chartUser.push(+(uPct * 100).toFixed(3)); chartNew.push(+(roundPct * 100).toFixed(3));
   });
 
-  const finalPct  = rows[rows.length - 1].uPct;
+  const finalPct = rows[rows.length - 1].uPct;
   const grossExit = ipoVal * finalPct;
   const grossMoic = grossExit / uInvest;
-  const grossIRR  = Math.pow(Math.max(grossMoic, 0.0001), 1 / uYears) - 1;
+  const grossIRR = Math.pow(Math.max(grossMoic, 0.0001), 1 / uYears) - 1;
 
   let net, wfRows;
 
   if (mode === 'direct') {
     const taxRate = +document.getElementById('tax-rate').value / 100;
-    const gain    = grossExit - uInvest;
-    const tax     = Math.max(0, gain) * taxRate;
+    const gain = grossExit - uInvest;
+    const tax = Math.max(0, gain) * taxRate;
     net = grossExit - tax;
 
     wfRows = [
-      { type: 'head',  label: '投入' },
-      { label: '投入本金', val: fmt(uInvest), cls: '' },
-      { type: 'head',  label: '退出' },
-      { label: '退出时持股比例', val: fmtPct(finalPct), cls: '' },
-      { label: '毛退出价值', val: fmt(grossExit), cls: '' },
-      { type: 'head',  label: '税收' },
-      { label: '计税基数（增益部分）', val: fmt(Math.max(0, gain)), cls: '' },
-      { label: `适用税率 ${(taxRate*100).toFixed(0)}% → 应缴税款`, val: '−' + fmt(tax), cls: 'neg' },
+      { type: 'head', label: '投入' }, { label: '投入本金', val: fmt(uInvest), cls: '' },
+      { type: 'head', label: '退出' }, { label: '退出时持股比例', val: fmtPct(finalPct), cls: '' }, { label: '毛退出价值', val: fmt(grossExit), cls: '' },
+      { type: 'head', label: '税收' }, { label: '计税基数（增益部分）', val: fmt(Math.max(0, gain)), cls: '' }, { label: `适用税率 ${(taxRate*100).toFixed(0)}% → 应缴税款`, val: '−' + fmt(tax), cls: 'neg' },
       { type: 'total', label: '税后净到手金额', val: fmt(net), cls: net >= uInvest ? 'pos' : 'red' },
       { type: 'sub', label: '净增益', val: (net-uInvest>=0?'+':'')+fmt(net-uInvest), cls: net>=uInvest?'pos':'neg' },
     ];
   } else {
-    const feeRate    = +document.getElementById('lp-fee').value / 100;
-    const hurdleRate = +document.getElementById('lp-hurdle').value / 100;
-    const carryRate  = +document.getElementById('lp-carry').value / 100;
-    const lpTax      = +document.getElementById('lp-tax').value / 100;
-    const lpTaxBase  = document.getElementById('lp-tax-base').value;
-
-    const totalFees  = uInvest * feeRate * uYears;
+    const feeRate = +document.getElementById('lp-fee').value / 100, hurdleRate = +document.getElementById('lp-hurdle').value / 100;
+    const carryRate = +document.getElementById('lp-carry').value / 100, lpTax = +document.getElementById('lp-tax').value / 100;
+    const totalFees = uInvest * feeRate * uYears;
 
     const wf = computeLPWaterfall(grossExit, uInvest, hurdleRate, uYears, carryRate, catchup);
-    const { carry, catchupAmt, catchupThreshold, afterCarry, hurdleAmt, prefReturn, hurdleHit, catchupHit } = wf;
-
-    const taxBase    = lpTaxBase === 'gain' ? Math.max(0, afterCarry - uInvest) : afterCarry;
-    const tax        = taxBase * lpTax;
-    net = afterCarry - tax;
+    const taxBase = document.getElementById('lp-tax-base').value === 'gain' ? Math.max(0, wf.afterCarry - uInvest) : wf.afterCarry;
+    const tax = taxBase * lpTax;
+    net = wf.afterCarry - tax;
     const netAfterFees = net - totalFees;
 
     wfRows = [
-      { type: 'head', label: '投入' },
-      { label: '认缴本金', val: fmt(uInvest), cls: '' },
-      { label: `管理费 ${(feeRate*100).toFixed(1)}%/年 × ${uYears}年`, val: '−' + fmt(totalFees), cls: 'neg' },
-      { type: 'head', label: '退出' },
-      { label: '退出时持股比例', val: fmtPct(finalPct), cls: '' },
-      { label: '毛退出价值', val: fmt(grossExit), cls: '' },
+      { type: 'head', label: '投入' }, { label: '认缴本金', val: fmt(uInvest), cls: '' }, { label: `管理费 ${(feeRate*100).toFixed(1)}%/年 × ${uYears}年`, val: '−' + fmt(totalFees), cls: 'neg' },
+      { type: 'head', label: '退出' }, { label: '退出时持股比例', val: fmtPct(finalPct), cls: '' }, { label: '毛退出价值', val: fmt(grossExit), cls: '' },
       { type: 'head', label: catchup === 'none' ? '欧洲瀑布分配（无 Catch-up）' : '欧洲瀑布分配（含 GP Catch-up）' },
-      { label: `① 返还本金门槛`, val: fmt(uInvest), cls: 'neutral' },
-      { label: `② 门槛收益率 ${(hurdleRate*100).toFixed(0)}%/年 → 门槛值（本金+门槛收益）`, val: fmt(hurdleAmt), cls: 'neutral' },
-      { label: hurdleHit ? '  ✓ 退出价值超过门槛，Carry 触发' : '  ✗ 未达门槛，Carry 不触发', val: '', cls: hurdleHit ? 'pos' : 'neutral' },
+      { label: `① 返还本金门槛`, val: fmt(uInvest), cls: 'neutral' }, { label: `② 门槛收益率 ${(hurdleRate*100).toFixed(0)}%/年 → 门槛值`, val: fmt(wf.hurdleAmt), cls: 'neutral' },
+      { label: wf.hurdleHit ? '  ✓ 退出价值超过门槛，Carry 触发' : '  ✗ 未达门槛，Carry 不触发', val: '', cls: wf.hurdleHit ? 'pos' : 'neutral' },
     ];
 
-    if (catchup === 'full' && hurdleHit) {
+    if (catchup === 'full' && wf.hurdleHit) {
       wfRows.push(
-        { type: 'catchup', label: `③ GP Catch-up：GP 独享 100% 直到累计 = Carry/(1−Carry) × 门槛利润`, val: fmt(catchupAmt) + ' (GP 独享)', cls: 'purple' },
-        { type: 'catchup', label: `   Catch-up 触发门槛（本金+门槛收益+Catch-up）`, val: fmt(catchupThreshold), cls: 'purple' },
-        { type: 'catchup', label: catchupHit ? `   ✓ 已越过 Catch-up 区间，进入正常分成` : `   ✗ 尚在 Catch-up 区间内`, val: '', cls: 'purple' },
-        { label: `${catchupHit?'④':'③'} 超 Catch-up 部分 → Carry ${(carryRate*100).toFixed(0)}% 分成`, val: '−' + fmt(carry) + '（GP 总计）', cls: carry > 0 ? 'neg' : 'neutral' }
+        { type: 'catchup', label: `③ GP Catch-up：GP 独享直到累计 = Carry/(1−Carry) × 门槛利润`, val: fmt(wf.catchupAmt), cls: 'purple' },
+        { type: 'catchup', label: `   Catch-up 触发门槛（本金+门槛+Catchup）`, val: fmt(wf.catchupThreshold), cls: 'purple' },
+        { label: `${wf.catchupHit?'④':'③'} 超 Catch-up 部分 → Carry ${(carryRate*100).toFixed(0)}% 分成`, val: '−' + fmt(wf.carry) + '（GP 总计）', cls: wf.carry > 0 ? 'neg' : 'neutral' }
       );
     } else {
-      wfRows.push({ label: `③ 超额利润 → Carry ${(carryRate*100).toFixed(0)}% 分成（超门槛部分）`, val: carry > 0 ? '−' + fmt(carry) : fmt(0), cls: carry > 0 ? 'neg' : 'neutral' });
+      wfRows.push({ label: `③ 超额利润 → Carry ${(carryRate*100).toFixed(0)}% 分成（超门槛部分）`, val: wf.carry > 0 ? '−' + fmt(wf.carry) : fmt(0), cls: wf.carry > 0 ? 'neg' : 'neutral' });
     }
 
     wfRows.push(
-      { label: 'LP 扣 Carry 后分配额', val: fmt(afterCarry), cls: '' },
-      { type: 'head', label: '税收' },
-      { label: `计税基数（${lpTaxBase==='gain'?'增益部分':'分配总额'}）`, val: fmt(taxBase), cls: '' },
-      { label: `税率 ${(lpTax*100).toFixed(0)}% → 应缴税款`, val: '−' + fmt(tax), cls: 'neg' },
+      { label: 'LP 扣 Carry 后分配额', val: fmt(wf.afterCarry), cls: '' },
+      { type: 'head', label: '税收' }, { label: `计税基数`, val: fmt(taxBase), cls: '' }, { label: `税率 ${(lpTax*100).toFixed(0)}% → 应缴税款`, val: '−' + fmt(tax), cls: 'neg' },
       { type: 'total', label: 'LP 税后净到手', val: fmt(net), cls: net >= uInvest ? 'pos' : 'red' },
       { type: 'sub', label: '含管理费后综合净增益', val: (netAfterFees>=0?'+':'')+fmt(netAfterFees), cls: netAfterFees>=0?'pos':'neg' }
     );
-    wfRows.push({ type: 'ref', label: `GP 实际分得（占全部利润的 ${fmtPct(grossExit>uInvest?carry/(grossExit-uInvest):0)}）`, val: fmt(carry) });
+    wfRows.push({ type: 'ref', label: `GP 实际分得（占全部利润的 ${fmtPct(grossExit>uInvest?wf.carry/(grossExit-uInvest):0)}）`, val: fmt(wf.carry) });
   }
 
-  const netMoic = net / uInvest;
-  const netIRR  = Math.pow(Math.max(netMoic, 0.0001), 1 / uYears) - 1;
-
-  if (mode === 'lp') document.getElementById('wf-title').innerHTML = '收益瀑布拆解' + (catchup === 'full' ? '<span class="cu-badge">GP Catch-up ✓</span>' : '');
-  else document.getElementById('wf-title').textContent = '收益瀑布拆解';
+  const netMoic = net / uInvest, netIRR = Math.pow(Math.max(netMoic, 0.0001), 1 / uYears) - 1;
+  document.getElementById('wf-title').innerHTML = '收益瀑布拆解' + (mode === 'lp' && catchup === 'full' ? '<span class="cu-badge">GP Catch-up ✓</span>' : '');
 
   document.getElementById('metrics').innerHTML = `
     <div class="metric-card"><div class="metric-label">退出时持股%</div><div class="metric-val blue">${fmtPct(finalPct)}</div></div>
@@ -1085,17 +819,16 @@ function calc() {
     </tr>`).join('');
 
   if (chartInst) { chartInst.destroy(); chartInst = null; }
-  const isDark    = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
-  const tickColor = isDark ? '#706e78' : '#9b9990';
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)', tickColor = isDark ? '#706e78' : '#9b9990';
 
   chartInst = new Chart(document.getElementById('ch'), {
     type: 'line',
     data: {
       labels,
       datasets: [
-        { label: '您的持股%', data: chartUser, borderColor: '#378add', backgroundColor: isDark ? 'rgba(55,138,221,0.1)' : 'rgba(55,138,221,0.07)', fill: true, tension: 0.3, pointBackgroundColor: '#378add', pointRadius: 5, pointHoverRadius: 7 },
-        { label: '本轮新投资方占比%', data: chartNew, borderColor: '#ef9f27', fill: false, tension: 0.3, borderDash: [5, 4], pointBackgroundColor: '#ef9f27', pointRadius: 4, pointHoverRadius: 6 }
+        { label: '您的持股%', data: chartUser, borderColor: '#378add', backgroundColor: isDark ? 'rgba(55,138,221,0.1)' : 'rgba(55,138,221,0.07)', fill: true, tension: 0.3, pointBackgroundColor: '#378add', pointRadius: 5 },
+        { label: '本轮新投资方占比%', data: chartNew, borderColor: '#ef9f27', fill: false, tension: 0.3, borderDash: [5, 4], pointBackgroundColor: '#ef9f27', pointRadius: 4 }
       ]
     },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw.toFixed(2)}%` } } }, scales: { y: { ticks: { callback: v => v + '%', font: { size: 11 }, color: tickColor }, grid: { color: gridColor } }, x: { ticks: { font: { size: 11 }, color: tickColor }, grid: { display: false } } } }
@@ -1104,11 +837,7 @@ function calc() {
   document.getElementById('results').className = '';
 }
 
-function showErr(msg) {
-  const e = document.getElementById('err');
-  e.textContent = msg;
-  e.style.display = 'block';
-}
+function showErr(msg) { document.getElementById('err').textContent = msg; document.getElementById('err').style.display = 'block'; }
 
 /* ============================================================
    Init
