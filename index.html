@@ -25,6 +25,9 @@
     --green-mid: #c0dd97;
     --amber: #ba7517;
     --amber-light: #faeeda;
+    --purple: #6b3fa0;
+    --purple-light: #f0eaf8;
+    --purple-mid: #c9b4e8;
     --red: #a32d2d;
     --red-light: #fcebeb;
     --radius: 8px;
@@ -51,6 +54,9 @@
       --green-mid: #1a4a30;
       --amber: #f0b840;
       --amber-light: #2a1f08;
+      --purple: #b08adf;
+      --purple-light: #1f1530;
+      --purple-mid: #4a2e70;
       --red: #f07070;
       --red-light: #2a1010;
     }
@@ -71,9 +77,7 @@
     padding: 40px 24px 80px;
   }
 
-  .header {
-    margin-bottom: 36px;
-  }
+  .header { margin-bottom: 36px; }
   .header h1 {
     font-size: 22px;
     font-weight: 600;
@@ -139,7 +143,7 @@
   }
 
   /* Mode toggle */
-  .mode-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+  .mode-bar { display: flex; gap: 10px; margin-bottom: 16px; }
   .mode-btn {
     flex: 1;
     height: 48px;
@@ -164,6 +168,86 @@
     background: var(--green-light);
     color: var(--green);
   }
+
+  /* Catch-up toggle */
+  .catchup-bar {
+    display: flex;
+    gap: 0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 3px;
+    width: fit-content;
+    margin-top: 14px;
+  }
+  .catchup-btn {
+    height: 30px;
+    padding: 0 14px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 500;
+    font-family: var(--sans);
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .catchup-btn:hover { color: var(--text); }
+  .catchup-btn.active-none {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .catchup-btn.active-full {
+    background: var(--purple);
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(107,63,160,0.3);
+  }
+
+  /* Catchup info box */
+  .catchup-box {
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    font-size: 12px;
+    line-height: 1.75;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text2);
+    display: none;
+  }
+  .catchup-box.visible { display: block; }
+  .catchup-box.mode-none {
+    border-color: var(--border2);
+    background: var(--surface2);
+  }
+  .catchup-box.mode-full {
+    border-color: var(--purple-mid);
+    background: var(--purple-light);
+    color: var(--purple);
+  }
+  .catchup-step {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 4px;
+    align-items: baseline;
+  }
+  .catchup-step-num {
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .mode-none .catchup-step-num { background: var(--border2); color: var(--text2); }
+  .mode-full .catchup-step-num { background: var(--purple); color: #fff; }
 
   /* Round rows */
   .round-row {
@@ -223,7 +307,6 @@
     margin-top: 10px;
   }
 
-  /* Note */
   .note {
     font-size: 11.5px;
     color: var(--text3);
@@ -231,7 +314,6 @@
     line-height: 1.65;
   }
 
-  /* Error */
   .alert {
     padding: 11px 14px;
     border-radius: var(--radius);
@@ -256,10 +338,11 @@
     font-family: var(--mono);
     color: var(--text);
   }
-  .metric-val.blue { color: var(--blue); }
-  .metric-val.green { color: var(--green); }
-  .metric-val.amber { color: var(--amber); }
-  .metric-val.red { color: var(--red); }
+  .metric-val.blue   { color: var(--blue); }
+  .metric-val.green  { color: var(--green); }
+  .metric-val.amber  { color: var(--amber); }
+  .metric-val.red    { color: var(--red); }
+  .metric-val.purple { color: var(--purple); }
 
   /* Waterfall table */
   .wf-table {
@@ -289,6 +372,17 @@
     letter-spacing: .04em;
     padding: 7px 12px;
   }
+  .wf-table tr.wf-catchup td {
+    background: var(--purple-light);
+    border-bottom: 1px dashed var(--purple-mid);
+    font-size: 12px;
+    color: var(--purple);
+    padding: 8px 12px;
+  }
+  .wf-table tr.wf-catchup td:last-child {
+    color: var(--purple);
+    font-weight: 600;
+  }
   .wf-table tr.wf-total td {
     border-top: 2px solid var(--border2);
     border-bottom: none;
@@ -308,9 +402,24 @@
     border-bottom: none;
     padding: 10px 12px 4px;
   }
-  .neg { color: var(--red); }
-  .pos { color: var(--green); }
+  .neg     { color: var(--red); }
+  .pos     { color: var(--green); }
   .neutral { color: var(--text2); }
+  .purple  { color: var(--purple); }
+
+  /* Catchup label badge */
+  .cu-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 20px;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-weight: 600;
+    background: var(--purple-mid);
+    color: var(--purple);
+    letter-spacing: .03em;
+  }
 
   /* Cap table */
   .ct {
@@ -335,12 +444,12 @@
     color: var(--text);
     vertical-align: middle;
   }
-  .ct td.r { text-align: right; font-family: var(--mono); font-size: 11.5px; }
+  .ct td.r  { text-align: right; font-family: var(--mono); font-size: 11.5px; }
   .ct td.rp { text-align: right; font-family: var(--mono); font-size: 12px; font-weight: 600; }
   .ct tr:last-child td { border-bottom: none; }
-  .ct tr.u-row td { background: var(--blue-light); }
+  .ct tr.u-row td   { background: var(--blue-light); }
   .ct tr.u-row td.rp { color: var(--blue); }
-  .ct tr.ipo-row td { background: var(--green-light); }
+  .ct tr.ipo-row td  { background: var(--green-light); }
   .ct tr.ipo-row td.rp { color: var(--green); }
 
   .tag {
@@ -352,7 +461,7 @@
     vertical-align: middle;
     font-weight: 500;
   }
-  .tb { background: var(--blue-mid); color: var(--blue); }
+  .tb { background: var(--blue-mid);  color: var(--blue); }
   .tg { background: var(--green-mid); color: var(--green); }
 
   .chart-wrap {
@@ -383,6 +492,25 @@
   .hidden { display: none; }
   .sep { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
 
+  /* Divider between catchup modes */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0 12px;
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
   footer {
     text-align: center;
     font-size: 11.5px;
@@ -400,7 +528,7 @@
   <!-- Header -->
   <div class="header">
     <h1>一级市场 Cap Table 收益率计算器</h1>
-    <p>支持任意轮次入场 · 直投与 LP 跟投两种模式 · 含稀释、税收、管理费及 Carry 完整拆解</p>
+    <p>支持任意轮次入场 · 直投与 LP 跟投两种模式 · 含稀释、税收、管理费及 Carry 完整拆解（含 GP Catch-up 可选）</p>
   </div>
 
   <!-- Mode -->
@@ -466,10 +594,43 @@
         <input type="number" id="lp-carry" value="20" min="0" max="30" step="1">
       </div>
     </div>
+
+    <!-- Catch-up toggle -->
+    <div class="section-divider">GP Catch-up 机制</div>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div class="catchup-bar">
+        <button class="catchup-btn active-none" id="cu-btn-none" onclick="setCatchup('none')">
+          无 Catch-up（标准欧洲瀑布）
+        </button>
+        <button class="catchup-btn" id="cu-btn-full" onclick="setCatchup('full')">
+          有 Catch-up（100% GP Catch-up）
+        </button>
+      </div>
+    </div>
+
+    <!-- Catch-up explanation box -->
+    <div class="catchup-box mode-none visible" id="cu-box">
+      <div style="font-weight:600;margin-bottom:8px;font-size:12px;">无 Catch-up — 欧洲瀑布标准模式</div>
+      <div class="catchup-step">
+        <div class="catchup-step-num">①</div>
+        <div>LP 优先收回全部本金（Return of Capital）</div>
+      </div>
+      <div class="catchup-step">
+        <div class="catchup-step-num">②</div>
+        <div>LP 优先获得门槛收益（Preferred Return）：本金 × (1+Hurdle)^年</div>
+      </div>
+      <div class="catchup-step">
+        <div class="catchup-step-num">③</div>
+        <div>剩余超额利润按 <strong>(1−Carry%) : Carry%</strong> 在 LP / GP 之间分配</div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;opacity:.75;">
+        → GP 的 Carry 仅计算"超过门槛"的那部分利润，对门槛以内收益不参与分配
+      </div>
+    </div>
+
     <p class="note" style="margin-top:10px">
       · 管理费从认缴资金中扣除，在投资前即产生，不计入被投企业股权<br>
-      · Carry 采用欧洲瀑布（European Waterfall）：先全额返还本金 → 达到门槛收益 → GP Catch-up → 剩余 (1−Carry%) / Carry% 分配<br>
-      · 本模型简化处理：超额部分整体按 Carry% 计算，适用于基金无 GP catch-up 条款场景
+      · Carry 采用欧洲瀑布（European Waterfall）；Catch-up 选项可切换两种常见结构
     </p>
   </div>
 
@@ -477,7 +638,6 @@
   <div class="card">
     <h2>税收设置</h2>
 
-    <!-- Direct tax -->
     <div id="direct-tax">
       <div class="g3">
         <div>
@@ -503,7 +663,6 @@
       <div class="info-box" id="tax-hint"></div>
     </div>
 
-    <!-- LP tax -->
     <div id="lp-tax-sec" class="hidden">
       <div class="g3">
         <div>
@@ -572,7 +731,7 @@
 
     <!-- Waterfall -->
     <div class="card">
-      <h2>收益瀑布拆解</h2>
+      <h2 id="wf-title">收益瀑布拆解</h2>
       <table class="wf-table" id="wfall"></table>
     </div>
 
@@ -595,13 +754,12 @@
           <tbody id="cap-b"></tbody>
         </table>
       </div>
-
       <div class="chart-wrap">
         <canvas id="ch"></canvas>
       </div>
       <div class="legend">
         <span><span class="leg-dot" style="background:#378add"></span>您的持股比例</span>
-        <span><span class="leg-dot" style="background:#ef9f27;height:2px;border-top:2px dashed #ef9f27;background:none"></span>本轮新投资方占比</span>
+        <span><span class="leg-dot" style="background:#ef9f27;border-top:2px dashed #ef9f27;background:none;height:0;margin-top:1px"></span>本轮新投资方占比</span>
       </div>
     </div>
 
@@ -611,8 +769,9 @@
       <div style="font-size:12.5px;color:var(--text2);line-height:1.9">
         <p><strong style="color:var(--text)">稀释机制：</strong>每轮融资采用"先扩期权池再计算本轮投资方占比"的标准 pre-money ESOP 逻辑，确保期权池稀释由老股东承担。</p>
         <p style="margin-top:8px"><strong style="color:var(--text)">MOIC：</strong>退出时持股市值 ÷ 初始投资金额（含税/费前后分别展示）。</p>
-        <p style="margin-top:8px"><strong style="color:var(--text)">IRR：</strong>假设单笔投入、单笔退出，公式为 (退出净值 ÷ 成本)^(1/年数) − 1。如需多期现金流 IRR，请联系开发者。</p>
-        <p style="margin-top:8px"><strong style="color:var(--text)">LP Carry 瀑布：</strong>欧洲瀑布模型，先返还全部出资本金，超过门槛收益率后 GP 参与超额分成，本模型暂不含 GP catch-up 步骤。</p>
+        <p style="margin-top:8px"><strong style="color:var(--text)">IRR：</strong>假设单笔投入、单笔退出，公式为 (退出净值 ÷ 成本)^(1/年数) − 1。</p>
+        <p style="margin-top:8px"><strong style="color:var(--text)">无 Catch-up（欧洲瀑布标准）：</strong>① 返还本金 → ② LP 获门槛收益 → ③ 超出门槛部分按 (1−c)/c 分配。Carry 仅计算超过门槛的那部分利润。</p>
+        <p style="margin-top:8px"><strong style="color:var(--text)">有 Catch-up（100% GP Catch-up）：</strong>① 返还本金 → ② LP 获门槛收益 → ③ GP 独享 100% 直到其累计获得"全部利润的 Carry%"（数学上 Catch-up 金额 = Carry/(1−Carry) × 门槛利润） → ④ 剩余部分按 (1−c)/c 分配。最终 GP 实际获得全部利润的 Carry%，而非仅超门槛部分的 Carry%。</p>
         <p style="margin-top:8px"><strong style="color:var(--text)">税务免责：</strong>税率仅为参考，实际适用税率因主体结构、地区政策、持股期限而异，请以专业税务顾问意见为准。</p>
       </div>
     </div>
@@ -630,8 +789,9 @@
 /* ============================================================
    State
    ============================================================ */
-let mode = 'direct';
-let rounds = [
+let mode    = 'direct';
+let catchup = 'none';   // 'none' | 'full'
+let rounds  = [
   { name: 'A轮', pre: 5000,  raise: 1000, esop: 5 },
   { name: 'B轮', pre: 20000, raise: 3000, esop: 0 },
   { name: 'C轮', pre: 60000, raise: 8000, esop: 0 }
@@ -651,12 +811,76 @@ function setMode(m) {
 }
 
 /* ============================================================
+   Catch-up toggle
+   ============================================================ */
+const CU_CONTENT = {
+  none: {
+    btnClass: 'active-none',
+    boxClass: 'catchup-box mode-none visible',
+    html: `
+      <div style="font-weight:600;margin-bottom:8px;font-size:12px;">无 Catch-up — 欧洲瀑布标准模式</div>
+      <div class="catchup-step">
+        <div class="catchup-step-num">①</div>
+        <div>LP 优先收回全部本金（Return of Capital）</div>
+      </div>
+      <div class="catchup-step">
+        <div class="catchup-step-num">②</div>
+        <div>LP 优先获得门槛收益（Preferred Return）：本金 × (1+Hurdle)<sup>年</sup></div>
+      </div>
+      <div class="catchup-step">
+        <div class="catchup-step-num">③</div>
+        <div>剩余超额利润按 <strong>(1−Carry%) : Carry%</strong> 在 LP / GP 之间分配</div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;opacity:.75;">
+        → GP 的 Carry 仅计算"超过门槛"的那部分利润，对门槛以内收益不参与分配
+      </div>`
+  },
+  full: {
+    btnClass: 'active-full',
+    boxClass: 'catchup-box mode-full visible',
+    html: `
+      <div style="font-weight:600;margin-bottom:8px;font-size:12px;">有 Catch-up — 100% GP Catch-up 模式</div>
+      <div class="catchup-step">
+        <div class="catchup-step-num">①</div>
+        <div>LP 优先收回全部本金（Return of Capital）</div>
+      </div>
+      <div class="catchup-step">
+        <div class="catchup-step-num">②</div>
+        <div>LP 优先获得门槛收益（Preferred Return）：本金 × (1+Hurdle)<sup>年</sup></div>
+      </div>
+      <div class="catchup-step">
+        <div class="catchup-step-num">③</div>
+        <div><strong>GP Catch-up：</strong>GP 独享 100% 分配，直到 GP 累计获得量 = Carry/(1−Carry) × 门槛利润<br>
+          <span style="font-size:11px;opacity:.85;">此时 GP 已获得"全部已分配利润 × Carry%"，与 LP 的比例对齐</span>
+        </div>
+      </div>
+      <div class="catchup-step">
+        <div class="catchup-step-num">④</div>
+        <div>剩余超额利润按 <strong>(1−Carry%) : Carry%</strong> 在 LP / GP 之间分配</div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;opacity:.85;">
+        → GP 最终获得 <strong>全部利润（非仅超门槛部分）的 Carry%</strong>，LP 最终净得更少，但结构对 GP 更友好
+      </div>`
+  }
+};
+
+function setCatchup(c) {
+  catchup = c;
+  const cu = CU_CONTENT[c];
+  document.getElementById('cu-btn-none').className = 'catchup-btn' + (c === 'none' ? ' active-none' : '');
+  document.getElementById('cu-btn-full').className = 'catchup-btn' + (c === 'full' ? ' active-full' : '');
+  const box = document.getElementById('cu-box');
+  box.className = cu.boxClass;
+  box.innerHTML = cu.html;
+}
+
+/* ============================================================
    Tax hints
    ============================================================ */
 const TAX_HINTS = {
   individual: '个人直接持股：股权转让所得税率通常为 20%（应纳税所得额 = 转让价 − 原值 − 合理费用）。A 股二级市场减持目前个人暂免征收个人所得税；境外上市（港股、美股）减持需按规缴纳。',
   corp:        '企业法人：股权转让收益并入企业所得税，一般税率 25%；高新技术企业 15%；小微企业有阶梯优惠。居民企业间直接投资持股 12 个月以上取得的股息红利免税（非上市公司直接持股）。',
-  fund:        '合伙制基金（有限合伙）穿透征税：自然人合伙人通常按"经营所得"适用 5%～35% 五级超额累进税率，但部分地区（北京、上海、深圳、新疆等）对股权投资基金自然人 LP 有 20% 核定征收优惠政策；法人合伙人并入企业所得税 25%。'
+  fund:        '合伙制基金（有限合伙）穿透征税：自然人合伙人通常按"经营所得"适用 5%～35% 五级超额累进税率，但部分地区对股权投资基金自然人 LP 有 20% 核定征收优惠政策；法人合伙人并入企业所得税 25%。'
 };
 function updateTaxHint() {
   const t = document.getElementById('investor-type').value;
@@ -736,6 +960,76 @@ function fmtIRR(n)    { return (n * 100).toFixed(1) + '%'; }
 function irrColor(irr){ return irr >= 0.3 ? 'green' : irr >= 0.15 ? 'amber' : irr >= 0 ? 'blue' : 'red'; }
 
 /* ============================================================
+   LP Carry Waterfall Engine
+   ============================================================
+   Standard European Waterfall, two modes:
+
+   Mode A — No Catch-up:
+     ① LP gets principal (P)
+     ② LP gets preferred return up to H = P*(1+hurdle)^years
+     ③ Profits above H split: LP (1-c), GP c
+     → GP Carry = max(0, G - H) * c
+
+   Mode B — 100% GP Catch-up:
+     ① LP gets principal (P)
+     ② LP gets preferred return up to H
+     ③ GP Catch-up: GP takes 100% until GP total = c/(1-c) * (H - P)
+        (Catch-up threshold = H + catchupAmt)
+     ④ Remaining profits split: LP (1-c), GP c
+     → GP's total Carry = c * (G - P)  [full profits basis]
+   ============================================================ */
+function computeLPWaterfall(G, P, hurdleRate, years, carryRate, catchupMode) {
+  const H           = P * Math.pow(1 + hurdleRate, years); // hurdle threshold
+  const prefReturn  = H - P;                                 // preferred return profit
+
+  if (G <= P) {
+    // Loss: LP gets back less than principal
+    return { carry: 0, catchupAmt: 0, catchupThreshold: H,
+             afterCarry: G, lpGross: G, gpGross: 0,
+             hurdleAmt: H, prefReturn, hurdleHit: false, catchupHit: false };
+  }
+
+  if (G <= H) {
+    // Above principal but below hurdle: no carry
+    return { carry: 0, catchupAmt: 0, catchupThreshold: H,
+             afterCarry: G, lpGross: G, gpGross: 0,
+             hurdleAmt: H, prefReturn, hurdleHit: false, catchupHit: false };
+  }
+
+  // G > H → carry kicks in
+  const hurdleHit = true;
+
+  if (catchupMode === 'none') {
+    // Mode A: carry only on profits above hurdle
+    const carry      = (G - H) * carryRate;
+    const afterCarry = G - carry;
+    return { carry, catchupAmt: 0, catchupThreshold: H,
+             afterCarry, lpGross: afterCarry, gpGross: carry,
+             hurdleAmt: H, prefReturn, hurdleHit, catchupHit: false };
+  } else {
+    // Mode B: 100% GP Catch-up
+    const catchupAmt       = (carryRate / (1 - carryRate)) * prefReturn;
+    const catchupThreshold = H + catchupAmt;
+    let carry, catchupHit;
+
+    if (G <= catchupThreshold) {
+      // Still in catch-up zone: GP takes everything above H
+      carry      = G - H;
+      catchupHit = false; // partial catch-up
+    } else {
+      // Past catch-up: split remaining
+      carry      = catchupAmt + (G - catchupThreshold) * carryRate;
+      catchupHit = true;
+    }
+
+    const afterCarry = G - carry;
+    return { carry, catchupAmt, catchupThreshold,
+             afterCarry, lpGross: afterCarry, gpGross: carry,
+             hurdleAmt: H, prefReturn, hurdleHit, catchupHit };
+  }
+}
+
+/* ============================================================
    Core calculation
    ============================================================ */
 function calc() {
@@ -804,83 +1098,147 @@ function calc() {
     net = grossExit - tax;
 
     wfRows = [
-      /* Section: 投入 */
-      { type: 'head', label: '投入' },
-      { label: '投入本金',           val: fmt(uInvest),          cls: '' },
-
-      /* Section: 退出 */
-      { type: 'head', label: '退出' },
-      { label: '退出时持股比例',     val: fmtPct(finalPct),      cls: '' },
-      { label: '毛退出价值',         val: fmt(grossExit),        cls: '' },
-
-      /* Section: 税 */
-      { type: 'head', label: '税收' },
-      { label: '计税基数（增益部分）',val: fmt(Math.max(0,gain)), cls: '' },
+      { type: 'head',  label: '投入' },
+      { label: '投入本金',              val: fmt(uInvest),           cls: '' },
+      { type: 'head',  label: '退出' },
+      { label: '退出时持股比例',        val: fmtPct(finalPct),       cls: '' },
+      { label: '毛退出价值',            val: fmt(grossExit),         cls: '' },
+      { type: 'head',  label: '税收' },
+      { label: '计税基数（增益部分）',  val: fmt(Math.max(0, gain)), cls: '' },
       { label: `适用税率 ${(taxRate*100).toFixed(0)}% → 应缴税款`,
-                                     val: '−' + fmt(tax),        cls: 'neg' },
-
-      /* Total */
+                                        val: '−' + fmt(tax),         cls: 'neg' },
       { type: 'total',
-        label: '税后净到手金额',     val: fmt(net),              cls: net >= uInvest ? 'pos' : 'red' },
+        label: '税后净到手金额',        val: fmt(net),               cls: net >= uInvest ? 'pos' : 'red' },
       { type: 'sub',
-        label: '净增益',            val: (net-uInvest>=0?'+':'')+fmt(net-uInvest),
-                                                                  cls: net>=uInvest?'pos':'neg' },
+        label: '净增益',               val: (net-uInvest>=0?'+':'')+fmt(net-uInvest),
+                                                                      cls: net>=uInvest?'pos':'neg' },
     ];
   } else {
-    const feeRate   = +document.getElementById('lp-fee').value / 100;
-    const hurdleRate= +document.getElementById('lp-hurdle').value / 100;
-    const carryRate = +document.getElementById('lp-carry').value / 100;
-    const lpTax     = +document.getElementById('lp-tax').value / 100;
-    const lpTaxBase = document.getElementById('lp-tax-base').value;
+    /* ---- LP Mode ---- */
+    const feeRate    = +document.getElementById('lp-fee').value / 100;
+    const hurdleRate = +document.getElementById('lp-hurdle').value / 100;
+    const carryRate  = +document.getElementById('lp-carry').value / 100;
+    const lpTax      = +document.getElementById('lp-tax').value / 100;
+    const lpTaxBase  = document.getElementById('lp-tax-base').value;
 
     const totalFees  = uInvest * feeRate * uYears;
-    const hurdleAmt  = uInvest * Math.pow(1 + hurdleRate, uYears);
-    const superProfit= Math.max(0, grossExit - uInvest);
-    const carry      = grossExit > hurdleAmt ? superProfit * carryRate : 0;
-    const afterCarry = grossExit - carry;
+
+    // Run waterfall engine
+    const wf = computeLPWaterfall(grossExit, uInvest, hurdleRate, uYears, carryRate, catchup);
+    const { carry, catchupAmt, catchupThreshold, afterCarry,
+            hurdleAmt, prefReturn, hurdleHit, catchupHit } = wf;
+
     const taxBase    = lpTaxBase === 'gain' ? Math.max(0, afterCarry - uInvest) : afterCarry;
     const tax        = taxBase * lpTax;
     net = afterCarry - tax;
-    const netAfterFees = net - totalFees; // informational
+    const netAfterFees = net - totalFees;
 
+    // Build waterfall rows based on catchup mode
     wfRows = [
-      /* Section: 投入 */
+      /* ── 投入 ── */
       { type: 'head', label: '投入' },
-      { label: '认缴本金',               val: fmt(uInvest),                  cls: '' },
+      { label: '认缴本金',
+        val: fmt(uInvest), cls: '' },
       { label: `管理费 ${(feeRate*100).toFixed(1)}%/年 × ${uYears}年`,
-                                         val: '−' + fmt(totalFees),           cls: 'neg' },
+        val: '−' + fmt(totalFees), cls: 'neg' },
 
-      /* Section: 退出 */
+      /* ── 退出 ── */
       { type: 'head', label: '退出' },
-      { label: '退出时持股比例',         val: fmtPct(finalPct),               cls: '' },
-      { label: '毛退出价值',             val: fmt(grossExit),                 cls: '' },
-      { label: `门槛收益率 ${(hurdleRate*100).toFixed(0)}%/年 → 门槛值`,
-                                         val: fmt(hurdleAmt),                 cls: 'neutral' },
-      { label: carry > 0 ? `超过门槛，Carry ${(carryRate*100).toFixed(0)}% 分成`
-                         : `未达门槛，Carry 不触发（${(carryRate*100).toFixed(0)}%）`,
-                                         val: carry > 0 ? '−' + fmt(carry) : fmt(0),
-                                                                              cls: carry>0?'neg':'neutral' },
-      { label: '扣 Carry 后 LP 分配额', val: fmt(afterCarry),                cls: '' },
+      { label: '退出时持股比例',
+        val: fmtPct(finalPct), cls: '' },
+      { label: '毛退出价值',
+        val: fmt(grossExit), cls: '' },
 
-      /* Section: 税 */
+      /* ── 瀑布分配 ── */
+      { type: 'head', label: catchup === 'none' ? '欧洲瀑布分配（无 Catch-up）' : '欧洲瀑布分配（含 GP Catch-up）' },
+
+      { label: `① 返还本金门槛`,
+        val: fmt(uInvest), cls: 'neutral' },
+      { label: `② 门槛收益率 ${(hurdleRate*100).toFixed(0)}%/年 → 门槛值（本金+门槛收益）`,
+        val: fmt(hurdleAmt), cls: 'neutral' },
+      { label: hurdleHit
+          ? '  ✓ 退出价值超过门槛，Carry 触发'
+          : '  ✗ 未达门槛，Carry 不触发',
+        val: '',
+        cls: hurdleHit ? 'pos' : 'neutral' },
+    ];
+
+    if (catchup === 'full' && hurdleHit) {
+      wfRows.push(
+        { type: 'catchup',
+          label: `③ GP Catch-up：GP 独享 100% 直到累计 = Carry/(1−Carry) × 门槛利润`,
+          val: fmt(catchupAmt) + ' (GP 独享)',
+          cls: 'purple' },
+        { type: 'catchup',
+          label: `   Catch-up 触发门槛（本金+门槛收益+Catch-up）`,
+          val: fmt(catchupThreshold),
+          cls: 'purple' },
+        { type: 'catchup',
+          label: catchupHit
+            ? `   ✓ 已越过 Catch-up 区间，进入正常分成`
+            : `   ✗ 尚在 Catch-up 区间内（GP 独享超出门槛的全部）`,
+          val: '',
+          cls: 'purple' },
+      );
+      wfRows.push(
+        { label: `${catchupHit?'④':'③'} 超 Catch-up 部分 → Carry ${(carryRate*100).toFixed(0)}% 分成`,
+          val: '−' + fmt(carry) + '（GP 总计）',
+          cls: carry > 0 ? 'neg' : 'neutral' },
+      );
+    } else {
+      wfRows.push(
+        { label: `③ 超额利润 → Carry ${(carryRate*100).toFixed(0)}% 分成（超门槛部分）`,
+          val: carry > 0 ? '−' + fmt(carry) : fmt(0),
+          cls: carry > 0 ? 'neg' : 'neutral' },
+      );
+    }
+
+    wfRows.push(
+      { label: 'LP 扣 Carry 后分配额',
+        val: fmt(afterCarry),
+        cls: '' },
+
+      /* ── 税 ── */
       { type: 'head', label: '税收' },
       { label: `计税基数（${lpTaxBase==='gain'?'增益部分':'分配总额'}）`,
-                                         val: fmt(taxBase),                   cls: '' },
+        val: fmt(taxBase), cls: '' },
       { label: `税率 ${(lpTax*100).toFixed(0)}% → 应缴税款`,
-                                         val: '−' + fmt(tax),                 cls: 'neg' },
+        val: '−' + fmt(tax), cls: 'neg' },
 
-      /* Total */
+      /* ── Total ── */
       { type: 'total',
-        label: 'LP 税后净到手',         val: fmt(net),                       cls: net >= uInvest ? 'pos' : 'red' },
+        label: 'LP 税后净到手',
+        val: fmt(net),
+        cls: net >= uInvest ? 'pos' : 'red' },
       { type: 'sub',
-        label: '含管理费后综合净增益',   val: (netAfterFees>=0?'+':'')+fmt(netAfterFees),
-                                                                              cls: netAfterFees>=0?'pos':'neg' },
-    ];
+        label: '含管理费后综合净增益',
+        val: (netAfterFees>=0?'+':'')+fmt(netAfterFees),
+        cls: netAfterFees>=0?'pos':'neg' },
+    );
+
+    /* ── GP summary (informational) ── */
+    const gpTotal = carry;
+    const gpPct   = grossExit > uInvest ? gpTotal / (grossExit - uInvest) : 0;
+    wfRows.push(
+      { type: 'ref',
+        label: `GP 实际分得（占全部利润的 ${fmtPct(gpPct)}）`,
+        val: fmt(gpTotal) },
+    );
   }
 
   const netMoic = net / uInvest;
   const netIRR  = Math.pow(Math.max(netMoic, 0.0001), 1 / uYears) - 1;
   const color   = irrColor(netIRR);
+
+  /* ---- Waterfall title ---- */
+  if (mode === 'lp') {
+    const badge = catchup === 'full'
+      ? '<span class="cu-badge">GP Catch-up ✓</span>'
+      : '';
+    document.getElementById('wf-title').innerHTML = '收益瀑布拆解' + badge;
+  } else {
+    document.getElementById('wf-title').textContent = '收益瀑布拆解';
+  }
 
   /* ---- Render metrics ---- */
   document.getElementById('metrics').innerHTML = `
@@ -911,11 +1269,21 @@ function calc() {
       if (r.type === 'head') {
         return `<tr class="wf-head"><td colspan="2">${r.label}</td></tr>`;
       }
+      if (r.type === 'catchup') {
+        return `<tr class="wf-catchup"><td style="padding-left:16px">${r.label}</td><td>${r.val}</td></tr>`;
+      }
       if (r.type === 'total') {
         return `<tr class="wf-total"><td>${r.label}</td><td class="${r.cls}">${r.val}</td></tr>`;
       }
       if (r.type === 'sub') {
         return `<tr class="wf-sub"><td style="padding-left:24px">${r.label}</td><td class="${r.cls}">${r.val}</td></tr>`;
+      }
+      if (r.type === 'ref') {
+        return `<tr class="wf-ref"><td>${r.label}</td><td>${r.val}</td></tr>`;
+      }
+      // Default: blank val means full-width label
+      if (!r.val) {
+        return `<tr><td colspan="2" style="padding-left:16px;font-size:12px;color:${r.cls==='pos'?'var(--green)':'var(--text2)'}">${r.label}</td></tr>`;
       }
       return `<tr><td style="padding-left:16px">${r.label}</td><td class="${r.cls}">${r.val}</td></tr>`;
     }).join('') +
@@ -944,7 +1312,7 @@ function calc() {
 
   /* ---- Chart ---- */
   if (chartInst) { chartInst.destroy(); chartInst = null; }
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark    = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const gridColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
   const tickColor = isDark ? '#706e78' : '#9b9990';
 
