@@ -1,0 +1,48 @@
+{
+  "mode": "lp",
+  "catchup": "full",
+  "rounds": [
+    {
+      "name": "A1轮",
+      "pre": 30000,
+      "raise": 7000,
+      "esop": 0
+    },
+    {
+      "name": "A1+轮",
+      "pre": 37000,
+      "raise": 4700,
+      "esop": 0
+    },
+    {
+      "name": "A2轮",
+      "pre": 90000,
+      "raise": 15000,
+      "esop": 0
+    },
+    {
+      "name": "B轮",
+      "pre": 225000,
+      "raise": 25000,
+      "esop": 0
+    }
+  ],
+  "inputs": {
+    "u-invest": "200",
+    "u-years": "6",
+    "u-round": "2",
+    "lp-fee": "2",
+    "lp-fee-base": "commit",
+    "lp-hurdle": "6",
+    "lp-carry": "20",
+    "exit-type": "open",
+    "investor-type": "individual",
+    "tax-rate": "20",
+    "lp-tax": "20",
+    "lp-tax-base": "gain",
+    "lp-investor-type": "individual",
+    "ipo-val": "500000",
+    "ipo-raise": "30000",
+    "ipo-esop": "0"
+  }
+}
